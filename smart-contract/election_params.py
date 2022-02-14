@@ -13,4 +13,4 @@ relative_election_end = 5000
 num_vote_options = 4
 
 #define vote options in a string separated by commas without spaces e.g., "BTC,ETH,USDT,ALGO"
-vote_options = ""
+vote_options = "A,B,C,D"
