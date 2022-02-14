@@ -161,50 +161,45 @@ For standardization, we require everyone use the same global variable names in t
 
 #### Step 1.1: Main Conditional 
 
-The heart of the smart contract is a simple logical switch statement used to route evaluation to different set of logic based on a Transaction's `OnComplete` value (defined in `create_app`). This logic allows the contract to choose which operation to run based on how the contract is called. For example, if `Txn.application_id()` is 0, then the on_creation sequence will run. If `Txn.on_completion()` is `OnComplete.OptIn`, the `on_register` sequence will run. We've completed the first few cases for you.
+The heart of the smart contract is a simple logical switch statement used to route evaluation to different sets of logic based on a Transaction's `OnComplete` value (defined in `create_app`). This logic allows the contract to choose which operation to run based on how the contract is called. For example, if `Txn.application_id()` is 0, then the on_creation sequence will run. If `Txn.on_completion()` is `OnComplete.OptIn`, the `on_register` sequence will run. We've completed the first few cases for you.
 
 **TODO:** Implement the `program` conditional. 
 
 #### Step 1.2: Creation
 
-Implement `on_create`: This sequence runs when the smart contract is created. It takes arguments from creation and puts them into the proper global variables.
+**TODO:** `on_create`: This sequence runs when the smart contract is created. It takes arguments from creation and puts them into the proper global variables.
+- Store the values of election parameters passed from the application arguments of the election that was created.
+  - the creator as whoever deployed the smart contract
+  - the round number for the end of the election
+  - the different options to vote for,
+  - the number of options there are to vote for
+- For all vote options, set initial vote tallies corresponding to all vote options to 0 where the keys are the vote options.
 
-**TODO:** Store the values of election parameters passed from the application arguments of the election that was created.
-- the creator as whoever deployed the smart contract
-- the round number for the end of the election
-- the different options to vote for,
-- the number of options there are to vote for
+Although there are many ways to store the vote options, for the purposes of this project, we want you to store them as a string of options separated by commas e.g., "A,B,C,D". Note that index-wise, A=0, B=1, C=2, D=3. 
 
-Although there are many ways to store the vote options, for the purposes of this project, we want you to store them as a string of options separated by commas e.g., "A,B,C,D". Note that index-wise, A=0, B=1, C=2, D=3
 
-Step 2: For all vote options, set initial vote tallies corresponding to all vote options to 0 where the keys are the vote options.
 
 #### Close-out
 
-Implement `on_closeout`, which is called when user removes interaction with this smart contract from their account.
-
-Step 1: Removes the user's vote from the correct vote tally if the user closes out of program before the end of the election.
-
-Step 2: Check that the voter is still in the election period and has actually voted. If so, update vote tally by subtracting one vote for whom the user voted for.
+**TODO:** Implement `on_closeout`, which is called when user removes interaction with this smart contract from their account.
+- Removes the user's vote from the correct vote tally if the user closes out of program before the end of the election.
+- Check that the voter is still in the election period and has actually voted. If so, update vote tally by subtracting one vote for whom the user voted for.
 
 #### Registration
 
-Implement `on_register`, a function that is called when sender/user opts-in to the smart contract
-Check users are registering before the end of the election period and set user's voting status to "maybe."
+**TODO:** Implement `on_register`, a function that is called when sender/user opts-in to the smart contract. 
+- Check users are registering before the end of the election period and set user's voting status to "maybe."
 
 #### Update user logic
 
-Implement `on_update_user_status`, which is called when creator wants to approve/disapprove of a user who opted-in the election.
+**TODO:** Implement `on_update_user_status`, which is called when creator wants to approve/disapprove of a user who opted-in the election.
+- Fetch the creator's decision to approve or reject a user acccount and update user's voting status accordingly.
+- Only the creator can approve or disapprove users and users can only be approved before the election ends.
+- Think about how the given user's address and creator's decision are stored
+
 `on_update_user_status` variables:
-
-- address_to_approve (bytes): 32-byte address that creator wants to approve/disapprove
-- is_user_approved (bytes): “yes” if creator wants address to be able to vote, “no” if the creator wants address to not be able to vote
-
-Step 1: Fetch the creator's decision to approve or reject a user acccount and update user's voting status accordingly.
-
-Step 2: Only the creator can approve or disapprove users and users can only be approved before the election ends.
-
-Step 3: Think about how the given user's address and creator's decision are stored
+- `address_to_approve` (bytes): 32-byte address that creator wants to approve/disapprove
+- `is_user_approved` (bytes): “yes” if creator wants address to be able to vote, “no” if the creator wants address to not be able to vote
 
 #### User Voting Logic:
 
