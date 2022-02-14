@@ -159,16 +159,17 @@ For standardization, we require everyone use the same global variable names in t
 
 ### Approval Program
 
-#### Main Conditional
+#### Step 1.1: Main Conditional 
 
-The heart of the smart contract is a simple logical switch statement used to route evaluation to different set of logic based on a Transaction's `OnComplete` value (defined in `create_app`). This logic allows the contract to choose which operation to run based on how the contract is called. For example, if Txn.application_id() is 0, then the on_creation sequence will run. If `Txn.on_completion()` is `OnComplete.OptIn`, the `on_register` sequence will run. We've completed the first few cases for you.
+The heart of the smart contract is a simple logical switch statement used to route evaluation to different set of logic based on a Transaction's `OnComplete` value (defined in `create_app`). This logic allows the contract to choose which operation to run based on how the contract is called. For example, if `Txn.application_id()` is 0, then the on_creation sequence will run. If `Txn.on_completion()` is `OnComplete.OptIn`, the `on_register` sequence will run. We've completed the first few cases for you.
 
-#### Creation
+**TODO:** Implement the `program` conditional. 
+
+#### Step 1.2: Creation
 
 Implement `on_create`: This sequence runs when the smart contract is created. It takes arguments from creation and puts them into the proper global variables.
 
-Step 1: Store the values of election parameters passed from the application arguments of the election that was created.
-
+**TODO:** Store the values of election parameters passed from the application arguments of the election that was created.
 - the creator as whoever deployed the smart contract
 - the round number for the end of the election
 - the different options to vote for,
