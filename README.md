@@ -40,8 +40,8 @@ A set of arrays can be passed with any application transaction that instructs th
 
 Storage can be either global or local. Local storage refers to storing values in an accounts balance record if that account participates in the contract. Global storage is data that is specifically stored on the blockchain for the contract globally. You can manipulate states with following PyTeal operations:
 
-- Reading and writing to application global state with App.globalPut, App.globalGet, App.globalDel.
-- Reading and writing to account local state with App.localPut, App.localGet, App.localDel.
+- Reading and writing to application global state with `App.globalPut`, `App.globalGet`, `App.globalDel`.
+- Reading and writing to account local state with `App.localPut`, `App.localGet`, `App.localDel`.
 - Refer to this link for more specific syntax details: https://pyteal.readthedocs.io/en/stable/state.html
 
 ## Overview
@@ -179,18 +179,18 @@ Although there are many ways to store the vote options, for the purposes of this
 
 
 
-#### Close-out
+#### 1.3 Close-out
 
 **TODO:** Implement `on_closeout`, which is called when user removes interaction with this smart contract from their account.
 - Removes the user's vote from the correct vote tally if the user closes out of program before the end of the election.
 - Check that the voter is still in the election period and has actually voted. If so, update vote tally by subtracting one vote for whom the user voted for.
 
-#### Registration
+#### 1.4 Registration
 
 **TODO:** Implement `on_register`, a function that is called when sender/user opts-in to the smart contract. 
 - Check users are registering before the end of the election period and set user's voting status to "maybe."
 
-#### Update user logic
+#### 1.5 Update user logic
 
 **TODO:** Implement `on_update_user_status`, which is called when creator wants to approve/disapprove of a user who opted-in the election.
 - Fetch the creator's decision to approve or reject a user acccount and update user's voting status accordingly.
@@ -201,46 +201,39 @@ Although there are many ways to store the vote options, for the purposes of this
 - `address_to_approve` (bytes): 32-byte address that creator wants to approve/disapprove
 - `is_user_approved` (bytes): “yes” if creator wants address to be able to vote, “no” if the creator wants address to not be able to vote
 
-#### User Voting Logic:
+#### 1.6 User Voting Logic:
 
-Implement `on_vote`, a function that is called when the txn sender/user votes. The logic in this sequence properly casts a user's vote and updates the local and global states accordingly.
+**TODO:** Implement `on_vote`, a function that is called when the txn sender/user votes. The logic in this sequence properly casts a user's vote and updates the local and global states accordingly.
+- Check that the election isn't over and that user is allowed to vote using get_sender_can_vote.
+- Check using `get_vote_of_sender` to check if the user has already voted. If so, return a 0. Otherwise, get the choice that the user wants to vote for from the application arguments.
+- Update the vote tally for the user's choice under the corresponding global variables.
+- Record the user has successfully voted by writing the choice they voted for to the user's "voted" key to reflect their choice. Make sure that the vote choice is within index bounds of the vote options.
 
 `on_vote` variables:
 
 - choice (int): Index for option the sender/user wants to vote for
 
-STEP 1: Check that the election isn't over and that user is allowed to vote using get_sender_can_vote.
 
-STEP 2: Check using `get_vote_of_sender` to check if the user has already voted. If so, return a 0. Otherwise, get the choice that the user wants to vote for from the application arguments.
-
-STEP 3: Update the vote tally for the user's choice under the corresponding global variables.
-
-STEP 4: Record the user has successfully voted by writing the choice they voted for to the user's "voted" key to reflect their choice. Make sure that the vote choice is within index bounds of the vote options.
 
 ### Clear State Program
 
-Implement the `clear_state_program()` function, which handles the logic of when an account clears its participation in a smart contract. Just like the `close_out` sequence, ensure the user clears state of program before the end of voting period and remove their vote from the correct vote tally.
+**TODO:** Implement the `clear_state_program()` function, which handles the logic of when an account clears its participation in a smart contract. 
+- Just like the `close_out` sequence, ensure the user clears state of program before the end of voting period and remove their vote from the correct vote tally.
+
 
 ## Step 2 - Implement the smart contract deploy script
 
-In the deploy script, you will implement functions that are used to interact with the smart contract and deploy the voting contract in the `main()` function.
+In the deploy script, you will deploy the voting contract using an ApplicationCall transaction in `create_app` and complete the `main()` function.
 
-Smart contracts are implemented using `ApplicationCall` transactions. These transaction types are as follows:
+**TODO:** Implement `deploy_create_app`. First, compile the approval and clear state programs to TEAL assembly, then to binary. Create the application and the application arguments which should include a list of election parameters you defined previously as global variables: `election_end`, `num_vote_options`, `vote_options`.
 
-- `NoOp` - Generic application calls to execute the `ApprovalProgram`.
-- `OptIn` - Accounts use this transaction to begin participating in a smart contract. Participation enables local storage usage.
-- `DeleteApplication` - Transaction to delete the application.
-- `UpdateApplication` - Transaction to update TEAL Programs for a contract.
-- `CloseOut` - Accounts use this transaction to close out their participation in the contract. This call can fail based on the TEAL logic, preventing the account from removing the contract from its balance record.
-- `ClearState` - Similar to `CloseOut`, but the transaction will always clear a contract from the account’s balance record whether the program succeeds or fails.
+**TODO:** Implement the `main()` function where you initialize the algod client and define absolute election end time fom the status of the last round. Deploy the application and print the global state.
 
-Step 1: Implement the `create_app`, `opt_in_app`, `call_app_approve_voter`, `call_app`, `delete_app`, `close_out_app`, and `clear_app` functions using the types of transaction application calls mentioned above.
 
-Refer to this link for specific transaction calls for the application methods mentioned above: https://developer.algorand.org/docs/get-details/dapps/smart-contracts/frontend/apps/.
+### Test smart contract using `simple_tests.py`
 
-Step 2: Implement `deploy_create_app`. First, compile the approval and clear state programs to TEAL assembly, then to binary. Create the application and the application arguments which should include a list of election parameters you defined previously as global variables: `election_end`, `num_vote_options`, `vote_options`.
+Test your smart contract functions by running the testing script simple_tests.py. Feel free to add your own tests as the ones we have provided are not comprehensive. We only test that basic functionalities are working, namely the creation and initial variable setup, two users opting in, the creator correctly approving two users, approved users being able to vote, and closing out the app. 
 
-Step 3: Implement the `main()` function where you initialize the algod client and define absolute election end time fom the status of the last round. Deploy the application and print the global state.
 
 ## Step 3 - Frontend Logic: `AlgoHandler.js`
 
@@ -264,7 +257,17 @@ We do not assume that you have extensive knowledge about JavaScript. JavaScript 
 
 In Practical Homework 1 and parts of this homework you have used the Python version of the AlgoSDK. The frontend will make use of the JavaScript version of the AlgoSDK. Both versions are very similar in functionality and even close in syntax.
 
-Take a look at the documentation here for how the Javscript AlgoSDK interacts with smart contracts:
+In general, smart contracts are implemented using `ApplicationCall` transactions in the AlgoSDK. These transaction types are as follows:
+- `NoOp` - Generic application calls to execute the `ApprovalProgram`.
+- `OptIn` - Accounts use this transaction to begin participating in a smart contract. Participation enables local storage usage.
+- `DeleteApplication` - Transaction to delete the application.
+- `UpdateApplication` - Transaction to update TEAL Programs for a contract.
+- `CloseOut` - Accounts use this transaction to close out their participation in the contract. This call can fail based on the TEAL logic, preventing the account from removing the contract from its balance record.
+- `ClearState` - Similar to `CloseOut`, but the transaction will always clear a contract from the account’s balance record whether the program succeeds or fails.
+
+You will be using the types of transaction application calls mentioned above to implement the `optInAccount`, `updateUserStatus`, `vote`, `closeOut`, and `clearState` functions.
+
+Take a look at the documentation here to understand how the Javscript AlgoSDK interacts with smart contracts and the specific syntax to use:
 
 - [https://developer.algorand.org/docs/get-details/dapps/smart-contracts/frontend/apps/](https://developer.algorand.org/docs/get-details/dapps/smart-contracts/frontend/apps/)
 - https://algorand.github.io/js-algorand-sdk/
