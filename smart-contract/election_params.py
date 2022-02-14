@@ -9,8 +9,8 @@ global_ints = (
 global_bytes = 2  # Creator and VoteOptions variables
 
 #define an election end period relative to current client status
-relative_election_end = 5000
+relative_election_end = 300000
 num_vote_options = 4
 
 #define vote options in a string separated by commas without spaces e.g., "BTC,ETH,USDT,ALGO"
-vote_options = ""
+vote_options = "A,B,C,D"
