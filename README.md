@@ -112,7 +112,7 @@ Voting Requirements:
 - Accounts cannot vote more than once. Accounts that close out of the application before the voting period has concluded, denoted by the global variable, `ElectionEnd`, will have their vote removed.
 - The creator of the election has to approve every account that opts in.
 
-Smart contract procedure
+Smart contract process:
 
 1.  Creator deploys smart contract
 2.  User(s) opt-in to the contract
@@ -224,6 +224,17 @@ Although there are many ways to store the vote options, for the purposes of this
 ## Step 2 - Implement the smart contract deploy script
 
 In the deploy script, you will deploy the voting contract using an ApplicationCall transaction in `create_app` and complete the `main()` function.
+
+**TODO:** Implement `create_app`. The creator will deploy the app using this method. This method has 7 parameters:
+- `sender`: address, representing the creator of the app
+- `sp`: suggested parameters obtained from the network
+- `on_complete`: enum value, representing NoOp. Describes the action to be taken following the execution of the approval program or clear state program. 
+- `approval_program`: compiled program
+- `clear program`: compiled program
+- `local_schema`: maximum local storage allocation, immutable
+- `global_schema`: maximum global storage allocation, immutable
+
+
 
 **TODO:** Implement `deploy_create_app`. First, compile the approval and clear state programs to TEAL assembly, then to binary. Create the application and the application arguments which should include a list of election parameters you defined previously as global variables: `election_end`, `num_vote_options`, `vote_options`.
 
