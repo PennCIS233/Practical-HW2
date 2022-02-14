@@ -102,31 +102,6 @@ def create_app(client, private_key, approval_program, clear_program, global_sche
     return app_id
 
 
-# OPT-IN 
-def opt_in_app(client, private_key, index):
-    # TODO: declare sender from the private key of the user who opts in
-    print("OptIn from account: ", sender)
-    # TODO: get node suggested parameters
-    # TODO: create unsigned transaction
-    # TODO: sign transaction
-    # TODO: send transaction
-    # TODO: await confirmation
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    print("OptIn to app-id:", transaction_response["txn"]["txn"]["apid"])
-
-# APPROVE VOTER WHO OPTS IN
-def call_app_approve_voter(client, private_key, index, app_args):
-    # TODO: Create a transaction that will be called when a creator has to approve a user account to vote. 
-    transaction_response = client.pending_transaction_info(tx_id)
-    print("Approved user ", user_address, "for apid ", transaction_response, ": ", response)
-
-
-# CALL VOTING APPLICATION 
-def call_app(client, private_key, index, app_args):
-    # TODO: Create a transaction that will be called when a user casts their vote.
-
 
 
 def format_state(state):
@@ -168,32 +143,6 @@ def read_global_state(client, addr, app_id):
             return format_state(app["params"]["global-state"])
     return {}
 
-'''----------------------------------------TODO-----------------------------------------------'''
-# DELETE APPLICATION
-def delete_app(client, private_key, index):
-    # TODO: Create transaction that gets called when the application is deleted.
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    print("Deleted app-id:", transaction_response["txn"]["txn"]["apid"])
-
-
-# CLOSE OUT OF APPLICATION
-def close_out_app(client, private_key, index):
-    # TODO: Create transaction that gets called when the application is closed out of. 
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    print("Closed out from app-id: ", transaction_response["txn"]["txn"]["apid"])
-
-
-# CLEAR APPLICATION
-def clear_app(client, private_key, index):
-    # TODO: Create transaction that gets called when the application gets cleared.
-
-    # display results
-    transaction_response = client.pending_transaction_info(tx_id)
-    print("Cleared app-id:", transaction_response["txn"]["txn"]["apid"])
 
 
 # DEPLOY APPLICATION THAT WAS CREATED
