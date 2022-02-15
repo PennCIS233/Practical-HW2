@@ -126,6 +126,8 @@ Smart contracts are implemented using two programs:
 - `ApprovalProgram`: Responsible for processing all application calls to the contract and implementing most of the logic of an application. Handles opting in, approving users to vote, and casting votes. Used to close out accounts and can control if a close out is allowed or not.
 - `ClearStateProgram`: uses the clear call to remove the smart contract from the balance record of user accounts. This method of opting out cannot be stopped by the smart contract.
 
+![alt text] https://github.com/PennCIS233/Practical-HW2/blob/main/smart-contract/Smart_Contract_Architecture.png
+
 
 ### Global Variables
 
