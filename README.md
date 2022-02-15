@@ -126,6 +126,7 @@ Smart contracts are implemented using two programs:
 - `ApprovalProgram`: Responsible for processing all application calls to the contract and implementing most of the logic of an application. Handles opting in, approving users to vote, and casting votes. Used to close out accounts and can control if a close out is allowed or not.
 - `ClearStateProgram`: uses the clear call to remove the smart contract from the balance record of user accounts. This method of opting out cannot be stopped by the smart contract.
 
+
 ### Global Variables
 
 For standardization, we require everyone use the same global variable names in the approval program of the smart contract.
@@ -158,6 +159,9 @@ For standardization, we require everyone use the same global variable names in t
 - Example: VoteOptions=”Abby,Barney,Cho,Di”. VotesFor0 refers to vote tally for Abby. VotesFor1 refers to vote tally for Barney. VotesFor2 refers to vote tally for Cho. VotesFor3 refers to vote tally for Di
 
 ### Approval Program
+
+#### `election_params.py`, `secrets.py`, `delete_app.py`
+Input your token and the private mnemonics of the accounts you want to register for the voting election in `secrets.py`. One of these will be the Creator account. Input the election parameters in `election_params.py`, where you will declare local and global ints and bytes for the local and glboal state schema, and define the election period, and the voting options. `election_smart_contract.py` will import values from both these files as parameters for the election you will create and accounts who opt in and vote. You can create and deploy new smart contracts based on new parameters or accounts. Since each account can only create up to 10 apps unless apps are deleted, feel free to run delete_app.py to delete previously created apps if the limit is reached.
 
 #### Step 1.1: Main Conditional 
 
