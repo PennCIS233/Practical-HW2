@@ -385,11 +385,7 @@ In `frontend/src/components/AlgoHandler.js` fill out the following 6 functions w
 6.  `clearState(address, appID)`
     - **TODO:** Create transaction, sign and send, similar to above
 
-## Step 4 - Implement the React front end
-
-To use our application, we could write scripts to interact with the blockchain, but it is much easier to interact with a nice user interface. So, we will be connecting our blockchain to a React frontend to interact with the blockchain!
-
-#### A brief tour of our React application
+## Bonus - A brief tour of our React application
 
 In this project, we have pre-built the React application for you to connect to, but we'll briefly touch over the file structure of our project.
 
@@ -408,47 +404,6 @@ Components:
 - **VoterCard.js**: The VoterCard component displays a card that will
 - **AlgoHandler.js**: The AlgoHandler component contains many helper functions that you will be implementing. You will have to implement functions to interact with the election, such as voting and opting-in, as well as functions to retrieve information about the state of the election.
 
-We highly recommend taking a look at how the components interact and how values are passed between the components, so that you have a good sense of how the frontend works when filling out the functions!
+We highly recommend taking a look at the files themselves, so that you have a good sense of how the frontend works so that when you complete the extension of this project!
 
-### Step 4.0 - Retrieve State from Blockchain
-
-First, you should implement the `refreshState()` function in the `frontend/src/pages/ElectionPage.js`. Remember, don't change the function names. Remember to use the functions you have written in `AlgoHandler`!
-
-- **TODO:** Get and update global election states (`electionState`, `totalVotes`, and `electionChoices`)
-- **TODO:** Get and update local election states (`optedAccounts`, `userVotes`)
-
-### Step 4.1 - Allow Users to Participate in Election
-
-In the `frontend/src/components/VoteCard.js`, you will find 4 functions to implement. Remember to use the functions you have written in `AlgoHandler`!
-
-1. `handleVoteSubmit()`
-
-- **TODO:** Retrieve the vote from the form and send the vote to the blockchain
-
-2. `handleOptIn()`
-
-- **TODO:** Send a transaction to opt in user to the election
-
-3. `handleCloseOut()`
-
-- **TODO:** Send a transaction to close out the user from the election
-
-4. `handleClearState()`
-
-- **TODO:** Send a transaction to clear the user's vote from the election
-
-### Step 4.2 - Allow Creator to Accept/Reject Users
-
-In the `frontend/src/components/ParticipantsCard.js`, you will find 2 functions to implement. Remember to use the functions you have written in `AlgoHandler`!
-
-1. `handleAccept()`
-
-- **TODO:** Have the creator accept the user into the election
-
-2. `handleReject()`
-
-- **TODO:** Have the creator reject the user from the election
-
-### Step 4.3 - Run application
-
-Now, you have finished your application! You can try running the app in your Chrome browser by running `npm start` in the `frontend/voting-app` folder.
+You can try running the app in your Chrome browser by running `npm start` in the `frontend/voting-app` folder.
