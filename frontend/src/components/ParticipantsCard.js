@@ -1,28 +1,62 @@
 import React from "react";
-import { Card, Button, Accordion, Tabs, Tab } from "react-bootstrap";
+import {
+  Card,
+  Button,
+  Accordion,
+  Tabs,
+  Tab,
+  ButtonGroup,
+} from "react-bootstrap";
 import mainAlgoHandler from "./AlgoHandler";
 
+/*
+ * Props:
+ *  - appID (string): id of the election
+ *  - users (list of strings): user addresses that are connected to AlgoSigner
+ *  - user (string): user that is the current selection in the dropdown
+ *  - isCreator (boolean): true if the current user is the creator of the election
+ *  - optedAccounts (JSON of lists of strings) - lists of users that are accepted, rejected and pending
+ *  - electionChoices (string) - comma-separated string of the election choices
+ */
 function ParticipantsCard(props) {
-  // handleAccept
-  // Description:
-  //  Makes call to approve a user when 'Accept' button is pressed
-  // Parameters:
-  //  user (string) - user to accept into the election
+  /* handleAccept
+   * Description:
+   *   Makes call to approve a user when 'Accept' button is pressed
+   * Parameters:
+   *  user (string) - user to accept into the election
+   */
   const handleAccept = (user) => {
-    // TODO: connect this function to AlgoHandler
+    mainAlgoHandler.updateUserStatus(
+      props.user,
+      user,
+      "yes",
+      parseInt(props.appID)
+    );
   };
 
-  // handleReject
-  // Description:
-  //  Makes call to approve a user when 'Reject' button is pressed
-  // Parameters:
-  //  user (string) - user to reject from the election
+  /* handleReject
+   * Description:
+   *  Makes call to approve a user when 'Reject' button is pressed
+   * Parameters:
+   *  user (string) - user to reject from the election
+   */
   const handleReject = (user) => {
-    // TODO: connect this function to AlgoHandler
+    mainAlgoHandler.updateUserStatus(
+      props.user,
+      user,
+      "no",
+      parseInt(props.appID)
+    );
   };
 
+  /*
+   * Render a card containing three tabs - "Accepted", "Rejected", and "Pending". All tabs
+   * contain a list of Accordions that allow the user to click and view more information about
+   * any user that has opted-in to the election. If the user is the creator, they can accept/reject
+   * users in the "Pending" tab.
+   */
   return (
-    <Card>
+    <Card className="h-50">
       <Card.Body>
         <Card.Title>Opted In Users</Card.Title>
         <Tabs
@@ -42,7 +76,7 @@ function ParticipantsCard(props) {
                       {user.substring(0, 20) + "..."}
                     </Accordion.Header>
                     <Accordion.Body>
-                      <b>Creator:</b> {user}
+                      <b>User Address:</b> {user}
                       <br />
                       {props.electionChoices[props.userVotes[user]] && (
                         <div>
@@ -66,7 +100,9 @@ function ParticipantsCard(props) {
                     <Accordion.Header>
                       {user.substring(0, 20) + "..."}
                     </Accordion.Header>
-                    <Accordion.Body>Creator: {user}</Accordion.Body>
+                    <Accordion.Body>
+                      <b>User Address:</b> {user}
+                    </Accordion.Body>
                   </Accordion.Item>
                 ))}
             </Accordion>
@@ -83,21 +119,24 @@ function ParticipantsCard(props) {
                       {user.substring(0, 20) + "..."}
                     </Accordion.Header>
                     <Accordion.Body>
-                      Creator: {user}
+                      <b>User Address:</b> {user}
                       {props.isCreator && (
                         <div>
-                          <Button
-                            onClick={() => handleAccept(user)}
-                            variant="success"
-                          >
-                            Accept
-                          </Button>
-                          <Button
-                            onClick={() => handleReject(user)}
-                            variant="danger"
-                          >
-                            Reject
-                          </Button>
+                          <ButtonGroup className="mt-1">
+                            <Button
+                              onClick={() => handleAccept(user)}
+                              variant="success"
+                            >
+                              Accept
+                            </Button>
+
+                            <Button
+                              onClick={() => handleReject(user)}
+                              variant="danger"
+                            >
+                              Reject
+                            </Button>
+                          </ButtonGroup>
                         </div>
                       )}
                     </Accordion.Body>

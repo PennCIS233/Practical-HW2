@@ -1,43 +1,80 @@
 import React, { useState } from "react";
-import { Card, Button, Form } from "react-bootstrap";
+import { ButtonGroup, Card, Button, Form } from "react-bootstrap";
 import mainAlgoHandler from "../components/AlgoHandler";
 
+/*
+ * Props:
+ *  - appID (string): id of the election
+ *  - user (string): user that is the current selection in the dropdown
+ *  - electionState (JSON): global state of the election
+ *  - isAccepted (boolean): true if the user has been accepted
+ *  - isPending (boolean): true if the user has opted-in but not been accepted/ rejected
+ *  - isRejected (boolean): true if the user has been rejected
+ *  - is Voted (boolean): true if the user has voted in the election already
+ *  - electionChoices (string) - comma-separated string of the election choices
+ */
 function VoterCard(props) {
-  const [voteChoice, setVoteChoice] = useState("");
+  const [voteChoice, setVoteChoice] = useState(""); // holds the vote option chosen on the radio select form
 
-  // handleVoteSelect
-  // Description:
-  //  Updates the states when the user changes their vote option
+  /* handleVoteSelect
+   * Description:
+   *  Updates the states when the user changes their vote option
+   */
   const handleVoteSelect = (e) => {
     setVoteChoice(e.target.value);
   };
 
-  // handleVoteSubmit
-  // Description:
-  //  Sends the vote to the blockchain.
+  /* handleVoteSubmit
+   * Description:
+   *  Sends the vote to the blockchain.
+   */
   const handleVoteSubmit = (e) => {
-    // TODO: connect to AlgoHandler
+    e.preventDefault();
+    const choices = props.electionChoices;
+    let voteValue = choices.indexOf(voteChoice);
+    if (voteValue > -1)
+      mainAlgoHandler.vote(props.user, voteValue, parseInt(props.appID));
   };
 
-  // handleOptIn
-  // Description:
-  //  Opts the user into the election on the blockchain.
+  /* handleOptIn
+   * Description:
+   *  Opts the user into the election on the blockchain.
+   * */
   const handleOptIn = (e) => {
-    // TODO: connect to AlgoHandler
+    e.preventDefault();
+    mainAlgoHandler.optInAccount(props.user, parseInt(props.appID));
   };
 
-  // handleClear
-  // Description:
-  //  Clears the user vote on the blockchain.
-  const handleClear = (e) => {
-    // TODO: connect to AlgoHandler
+  /* handleClearState
+   * Description:
+   *  Clears the user vote on the blockchain.
+   */
+  const handleClearState = (e) => {
+    e.preventDefault();
+    mainAlgoHandler.clearState(props.user, parseInt(props.appID));
   };
 
+  /* handleCloseOut
+   *  Description:
+   *   Closes out the user vote on the blockchain.
+   */
+  const handleCloseOut = (e) => {
+    e.preventDefault();
+    mainAlgoHandler.closeOut(props.user, parseInt(props.appID));
+  };
+
+  /*
+   * Render the card which allows the user to participate in the election.
+   * In the beginning, the user can opt-in, and then the card shows a page
+   * which waits for acceptance. If the user is rejected, then they are done.
+   * If they are accepted, they have the option to vote in the election. Once
+   * they vote, they can clear state / close out.
+   */
   return (
-    <Card>
-      {!props.isOpted && !props.isAccepted && !props.isRejected && (
+    <Card className="h-50 mt-1">
+      {!props.isPending && !props.isAccepted && !props.isRejected && (
         <Card.Body>
-          <Card.Title>Opt In to the Election</Card.Title>
+          <Card.Title>Opt-In to the Election</Card.Title>
           <Card.Text>
             To participate in the election, you must opt-in. If the creator of
             the election accepts, you can vote!
@@ -89,8 +126,20 @@ function VoterCard(props) {
           <Card.Title>You Voted!</Card.Title>
           <Card.Text>
             You have cast your vote for option{" "}
-            {props.electionChoices[props.isVoted]}
+            {props.electionChoices[props.isVoted]}.
           </Card.Text>
+          <Card.Text>
+            If you'd like to have your vote removed, you can either close out or
+            clear state below.
+          </Card.Text>
+          <ButtonGroup>
+            <Button onClick={handleCloseOut} variant="info" type="submit">
+              Close Out
+            </Button>
+            <Button onClick={handleClearState} variant="info" type="submit">
+              Clear State
+            </Button>
+          </ButtonGroup>
         </Card.Body>
       )}
 
@@ -98,18 +147,18 @@ function VoterCard(props) {
         <Card.Body>
           <Card.Title>You Have Been Rejected</Card.Title>
           <Card.Text>
-            The creator of this election has rejected your request to be able to vote in this election
+            The creator of this election has rejected your request to be able to
+            vote in this election.
           </Card.Text>
-          <Form onSubmit={handleCloseOut}>
-            <Button variant="info" type="submit">
+
+          <ButtonGroup>
+            <Button onClick={handleCloseOut} variant="info" type="submit">
               Close Out
             </Button>
-          </Form>
-          <Form onSubmit={handleClearState}>
-            <Button variant="info" type="submit">
+            <Button onClick={handleClearState} variant="info" type="submit">
               Clear State
             </Button>
-          </Form>
+          </ButtonGroup>
         </Card.Body>
       )}
     </Card>
