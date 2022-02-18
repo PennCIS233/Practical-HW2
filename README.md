@@ -335,23 +335,20 @@ In `frontend/src/components/AlgoHandler.js` fill out the `TODO` sections. Rememb
 
 ### Step 3.2 - Retrieving Data
 
-In `frontend/src/components/AlgoHandler.js` fill out the following 4 functions with the commented functionality. Remember, don't change the function names. Feel free to add helper functions if you want. Remember to use JavaScript's `await` keyword when using `this.algodClient`, `this.algodIndexer`, and `window.AlgoSigner`
+In `frontend/src/components/AlgoHandler.js` fill out the following 3 functions with the commented functionality. Remember, don't change the function names. Feel free to add helper functions if you want. Remember to use JavaScript's `await` keyword when using `this.algodClient`, `this.algodIndexer`, and `window.AlgoSigner`
 
 #### Relevant Documentation
 
 - https://developer.algorand.org/solutions/example-digital-exchange-smart-contract-application/
 - https://github.com/PureStake/algosigner/blob/develop/docs/dApp-integration.md#algosignerconnect
 
-1.  `getAlgoSignerAccounts()`
+1. `getAlgoSignerAccounts()`
     - **TODO:** Connect to AlgoSigner
     - **TODO:** Retrieve all addresses in array format and return them
-2.  `isCreator(appID, address)`
-    - **TODO:** Return a boolean based on if the given `address` is the creator of the app at `appID`
-    - **HINT:** Two possible approaches are given in the code comments
-3.  `getElectionState(appID)`
+2. `getElectionState(appID)`
     - **TODO:** Use `this.algodClient` to retrieve the app details
     - The rest is filled out for you :)
-4.  `getAllLocalStates(appID)`
+3. `getAllLocalStates(appID)`
     - **TODO:** Use `this.indexerClient` to find all accounts who are associated with the given app
     - **TODO:** Take the data and format it into a neat JavaScript object (nearly equivalent to a Python dictionary) as specified
       - Example:
