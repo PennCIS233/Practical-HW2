@@ -8,7 +8,7 @@ from algosdk import account, mnemonic
 from algosdk.v2client import algod
 from pyteal import compileTeal, Mode
 from election_smart_contract import approval_program, clear_state_program
-from secrets import account_mnemonics, algod_token, algod_address
+from secrets import account_mnemonics, algod_headers, algod_address
 import election_params
 from election_params import relative_election_end, num_vote_options, vote_options, local_ints, local_bytes, global_ints, global_bytes
 
@@ -17,19 +17,15 @@ use this script to delete previously created apps. Uncomment the last few lines 
 
 '''------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'''
 
-''' Define keys, addresses, and token ''' 
-#import ENV # import your own file that has your private keys, mnemonics, etc
+# Define keys, addresses, and token
 account_private_keys = [mnemonic.to_private_key(mn) for mn in account_mnemonics]
 account_addresses = [account.address_from_private_key(sk) for sk in account_private_keys]
-# user declared algod connection parameters. Node must have EnableDeveloperAPI set to true in its config
-algod_address = algod_address
-algod_token = algod_token
 
 
 algod_client = algod.AlgodClient(
     algod_token="",
     algod_address="https://testnet-algorand.api.purestake.io/ps2",
-    headers={"X-API-Key": algod_token}
+    headers=algod_headers
 )
 ''' TODO: Fill in to define account to delete apps from and app_id of app to delete''' 
 
