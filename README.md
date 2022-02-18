@@ -274,7 +274,7 @@ If our frontend wants to display relevant information to our users it will need 
 
 #### How
 
-`frontend/src/components/AlgoHandler.js` is meant to contain all functionality related to retrieving information about the smart contract and sending transactions to the Algorand TestNet.
+`frontend/src/utils/AlgoHandler.js` is meant to contain all functionality related to retrieving information about the smart contract and sending transactions to the Algorand TestNet.
 
 ### Step 3.0 - Getting Familiar with the Tools
 
@@ -320,7 +320,9 @@ Purestake has an API setup for querying historical data from the Algorand blockc
 
 Take a look at this example to see how it uses the Indexer to read the local state of all accounts which opted-in to the application: https://developer.algorand.org/solutions/example-digital-exchange-smart-contract-application/
 
-#### AlgoHandler.js `frontend/src/components/AlgoHandler.js`
+In `frontend/src/utils/` create a new file `frontend/src/utils/secrets.js` with the same format as `frontend/src/utils/secrets.template.js` using your PureStake API key.
+
+#### AlgoHandler.js `frontend/src/utils/AlgoHandler.js`
 
 This file exports a singular instance of the class it contains which is meant to encapsulate data retrieval and transaction-sending from and to the Algorand blockchain.
 
@@ -328,30 +330,27 @@ We provide you a skeleton outline with all the necessary functions needed for yo
 
 ### Step 3.1 - AlgoHandler constructor
 
-In `frontend/src/components/AlgoHandler.js` fill out the `TODO` sections. Remember, don't change the variable names. You can define additional variables if needed.
+In `frontend/src/utils/AlgoHandler.js` fill out the `TODO` sections. Remember, don't change the variable names. You can define additional variables if needed.
 
 - Set the `this.algodClient` variable
 - Set the `this.indexerClient` variable
 
 ### Step 3.2 - Retrieving Data
 
-In `frontend/src/components/AlgoHandler.js` fill out the following 4 functions with the commented functionality. Remember, don't change the function names. Feel free to add helper functions if you want. Remember to use JavaScript's `await` keyword when using `this.algodClient`, `this.algodIndexer`, and `window.AlgoSigner`
+In `frontend/src/utils/AlgoHandler.js` fill out the following 3 functions with the commented functionality. Remember, don't change the function names. Feel free to add helper functions if you want. Remember to use JavaScript's `await` keyword when using `this.algodClient`, `this.algodIndexer`, and `window.AlgoSigner`
 
 #### Relevant Documentation
 
 - https://developer.algorand.org/solutions/example-digital-exchange-smart-contract-application/
 - https://github.com/PureStake/algosigner/blob/develop/docs/dApp-integration.md#algosignerconnect
 
-1.  `getAlgoSignerAccounts()`
+1. `getAlgoSignerAccounts()`
     - **TODO:** Connect to AlgoSigner
     - **TODO:** Retrieve all addresses in array format and return them
-2.  `isCreator(appID, address)`
-    - **TODO:** Return a boolean based on if the given `address` is the creator of the app at `appID`
-    - **HINT:** Two possible approaches are given in the code comments
-3.  `getElectionState(appID)`
+2. `getElectionState(appID)`
     - **TODO:** Use `this.algodClient` to retrieve the app details
     - The rest is filled out for you :)
-4.  `getAllLocalStates(appID)`
+3. `getAllLocalStates(appID)`
     - **TODO:** Use `this.indexerClient` to find all accounts who are associated with the given app
     - **TODO:** Take the data and format it into a neat JavaScript object (nearly equivalent to a Python dictionary) as specified
       - Example:
@@ -373,7 +372,7 @@ In `frontend/src/components/AlgoHandler.js` fill out the following 4 functions w
 
 ### Step 3.3 - Sending Transactions
 
-In `frontend/src/components/AlgoHandler.js` fill out the following 6 functions with the commented functionality. Remember, don't change the function names. Feel free to add helper functions if you want. Remember to use JavaScript's `await` when using `this.algodClient`, `this.algodIndexer`, and `window.AlgoSigner`
+In `frontend/src/utils/AlgoHandler.js` fill out the following 6 functions with the commented functionality. Remember, don't change the function names. Feel free to add helper functions if you want. Remember to use JavaScript's `await` when using `this.algodClient`, `this.algodIndexer`, and `window.AlgoSigner`
 
 #### Relevant Documentation
 

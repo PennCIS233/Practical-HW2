@@ -7,7 +7,7 @@ import {
   Tab,
   ButtonGroup,
 } from "react-bootstrap";
-import mainAlgoHandler from "./AlgoHandler";
+import mainAlgoHandler from "../utils/AlgoHandler";
 
 /*
  * Props:
