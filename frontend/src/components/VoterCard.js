@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ButtonGroup, Card, Button, Form } from "react-bootstrap";
-import mainAlgoHandler from "../components/AlgoHandler";
+import mainAlgoHandler from "../utils/AlgoHandler";
 
 /*
  * Props:

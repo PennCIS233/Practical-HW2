@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Container, Modal, Button } from "react-bootstrap";
-import mainAlgoHandler from "../components/AlgoHandler";
+import mainAlgoHandler from "../utils/AlgoHandler";
 import NavBar from "../components/NavBar";
 import VoterCard from "../components/VoterCard";
 import ParticipantsCard from "../components/ParticipantsCard";

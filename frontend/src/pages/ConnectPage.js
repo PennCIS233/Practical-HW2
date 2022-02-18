@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Row, Col, Card, Container, Button, Form } from "react-bootstrap";
-import mainAlgoHandler from "../components/AlgoHandler";
+import mainAlgoHandler from "../utils/AlgoHandler";
 import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
 
