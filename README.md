@@ -1,4 +1,4 @@
-# Practical Homework 1: Algorand Election dApp
+# Practical Homework 2: Algorand Election dApp
 
 In this homework you will build an election dApp (decentralized app), creating a smart contract on the Algorand network and a webapp frontend.
 
@@ -13,7 +13,7 @@ The webapp frontend will allow users to easily interact with the smart contract 
 Smart contracts have seen a large uptick in use cases and are being adopted worldwide as a method of decentralized. Smart contracts utilize the blockchain's power to ensure **transparency**, **verifiability**, and **decentralization**.
 
 - **Transparency** - The compiled code resides publicly on the blockchain. Any transaction interacting with the smart contract is also public.
-- **Verifiability** - User's can verify that their interactions with the smart contract actually occurred and produced the exact results that were wanted by looking at the public blockchain transactions
+- **Verifiability** - Users can verify that their interactions with the smart contract actually occurred and produced the exact results that were expected by looking at the public blockchain transactions
 - **Decentralization** - There is no single point of failure since the blockchain network is decentralized.
 
 #### Relevant articles
@@ -38,7 +38,7 @@ A set of arrays can be passed with any application transaction that instructs th
 
 ### Storage and state manipulation
 
-Storage can be either global or local. Local storage refers to storing values in an accounts balance record if that account participates in the contract. Global storage is data that is specifically stored on the blockchain for the contract globally. You can manipulate states with following PyTeal operations:
+Storage can be either global or local. Global storage is data that is specifically stored on the blockchain for the contract globally. Global storage is limited to 64 key/value pairs. When a contract needs to store more data, for example to store data associated to each account that uses the smart contract (such as if the account is a registered voter), global storage cannot be used. Instead, local storage must be used. Local storage is also stored on the blockchain but contrary to global storage, there is one local storage per account that "opts in" in the contract.  You can manipulate states with following PyTeal operations:
 
 - Reading and writing to application global state with `App.globalPut`, `App.globalGet`, `App.globalDel`.
 - Reading and writing to account local state with `App.localPut`, `App.localGet`, `App.localDel`.
@@ -52,7 +52,7 @@ Storage can be either global or local. Local storage refers to storing values in
 
 ### Step 0.0 - Complete Practical Homework
 
-1 In [Practical Homework 1](https://github.com/PennCIS233/Practical-HW1) you install **Python** and **Pip**, setup your **PureStake account**, and install **PyCharm**.
+In [Practical Homework 1](https://github.com/PennCIS233/Practical-HW1) you install **Python** and **Pip**, setup your **PureStake account**, and install **PyCharm**.
 
 If you have not setup any of those please refer to the [Practical HW 1](https://github.com/PennCIS233/Practical-HW1).
 
@@ -66,7 +66,7 @@ Once you have Google Chrome installed add the AlgoSigner extension at this [link
 
 ### Step 0.2 - Setup AlgoSigner Accounts
 
-In practical homework 1 you created two Algorand accounts. Account A and Account B. Once you have Algorand installed on Chrome do the following.
+In Practical Homework 1 you created two Algorand accounts. Account A and Account B. Once you have Algorand installed on Chrome do the following.
 
 - Import Account A and Account B into AlgoSigner **on the TestNet**
   - Save the addresses in form.md
@@ -80,27 +80,39 @@ A walkthrough on how to do both of these can be seen here:
 
 ### Step 0.3 - Fund AlgoSigner Accounts
 
-In the same way as practical homework 1, in order to use your accounts you need to fund them. Use a [dispenser](https://bank.testnet.algorand.network/) to fund the accounts.
+In the same way as Practical Homework 1, in order to use your accounts you need to fund them. Use a [dispenser](https://bank.testnet.algorand.network/) to fund the accounts.
+
+Note that if you successfully finished Practical Homework 1, your two accounts must already have Algos in it and you can skip those tests.
 
 ### Step 0.4 - Install PyTeal
 
 Install the PyTeal library, `pyteal`, by typing this into your terminal:
 
 ```bash
-pip3 install pyteal
+python3 -m pip install pyteal
 ```
+
+If you are using Windows, you may need to replace `python3` by `python` everywhere.
 
 ### Step 0.5 - Install Node.js and set up environment
 
-First, check if you have Node installed by running `node -v; npm -v`. You should have a Node version of at least x.x.x.
+First, check if you have Node installed by running `node -v; npm -v`. You should have a Node version of at least 12.
 
 If you do not have Node.js, you can download it [here] (https://nodejs.org/en/download/).
+If you are using MacOS, it is recommended to install Node.JS using [HomeBrew](https://brew.sh/) as follows:
+```bash
+brew install node
+```
 
-Next, download the files for this project. Open your terminal, and `cd` into the TODO directory. Once inside the directory, type `npm install`, which will download all the dependencies required for the project. Specifically, the dependencies specified in package.json will be downloaded into a node_modules/ directory.
+Next, download the files for this project. Open your terminal, and `cd` into the `frontend` directory. Once inside the directory, type `npm install`, which will download all the dependencies required for the project. Specifically, the dependencies specified in package.json will be downloaded into a node_modules/ directory.
 
-To see i fyou have everything working, type `npm start`. You should see a basic webpage appear in your browser at localhost:3000. If you made it this far, then your setup has been successful!
+To see if you have everything working, type `npm start`. You should see a basic webpage appear in your browser at localhost:3000. If you made it this far, then your setup has been successful!
 
 ## Step 1 - Create the smart contract
+
+The smart contract is inside the `smart-contract` folder.
+
+We recall that the smart contract will be written in Python using PyTeal.
 
 ### Design Overview:
 
@@ -162,7 +174,12 @@ For standardization, we require everyone use the same global variable names in t
 ### Approval Program
 
 #### `election_params.py`, `secrets.py`, `delete_app.py`
-Input your token and the private mnemonics of the accounts you want to register for the voting election in `secrets.py`. One of these will be the Creator account. Input the election parameters in `election_params.py`, where you will declare local and global ints and bytes for the local and glboal state schema, and define the election period, and the voting options. `election_smart_contract.py` will import values from both these files as parameters for the election you will create and accounts who opt in and vote. You can create and deploy new smart contracts based on new parameters or accounts. Since each account can only create up to 10 apps unless apps are deleted, feel free to run delete_app.py to delete previously created apps if the limit is reached.
+
+Copy the files `election_param.template.py` and `secrets.template.py` into `election_params.py` and `secrets.py`.
+
+Input your token and the private mnemonics of the accounts you want to register for the voting election in `secrets.py`. One of these will be the Creator account. Input the election parameters in `election_params.py`, where you will declare local and global ints and bytes for the local and glboal state schema, and define the election period, and the voting options. 
+
+`election_smart_contract.py` will import values from both these files as parameters for the election you will create and accounts who opt in and vote. You can create and deploy new smart contracts based on new parameters or accounts. Since each account can only create up to 10 apps unless apps are deleted, feel free to run delete_app.py to delete previously created apps if the limit is reached.
 
 #### Step 1.1: Main Conditional 
 

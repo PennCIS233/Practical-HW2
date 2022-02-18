@@ -13,10 +13,11 @@ from algosdk.v2client import algod
 from pyteal import compileTeal, Mode
 from election_smart_contract import approval_program, clear_state_program
 
-# fill in your secret mnemonics and algod_token in secrets.py
-from secrets import account_mnemonics, algod_token
+# fill in your secret mnemonics and algod_headers in secrets.py
+from secrets import account_mnemonics, algod_headers
 
-from deploy import compile_program, wait_for_confirmation, create_app
+from deploy import create_app
+from helper import compile_program, wait_for_confirmation
 
 account_private_keys = [mnemonic.to_private_key(mn) for mn in account_mnemonics]
 account_addresses = [account.address_from_private_key(sk) for sk in account_private_keys]
@@ -28,8 +29,9 @@ algod_address = "https://testnet-algorand.api.purestake.io/ps2"
 client = algod.AlgodClient(
     algod_token="",
     algod_address="https://testnet-algorand.api.purestake.io/ps2",
-    headers={"X-API-Key": algod_token}
+    headers=algod_headers
 )
+
 
 # opt-in to application
 def opt_in_app(client, private_key, index):
@@ -114,49 +116,6 @@ def call_app(client, private_key, index, app_args):
     wait_for_confirmation(client, tx_id)
 
 
-# formats the state that is retrieved form
-def format_state(state):
-    formatted = {}
-    for item in state:
-        key = item["key"]
-        value = item["value"]
-        formatted_key = base64.b64decode(key).decode("utf-8")
-        if value["type"] == 1:
-            # byte string
-            if formatted_key in ["VoteOptions", "can_vote"]:
-                formatted_value = base64.b64decode(value["bytes"]).decode("utf-8")
-            elif formatted_key == "Creator":
-                formatted_value = encode_address(base64.b64decode(value["bytes"]))
-            else:
-                formatted_value = value["bytes"]
-            formatted[formatted_key] = formatted_value
-        else:
-            # integer
-            formatted[formatted_key] = value["uint"]
-    return formatted
-
-
-# read user local state
-def read_local_state(client, addr, app_id):
-    results = client.account_info(addr)
-    for local_state in results["apps-local-state"]:
-        if local_state["id"] == app_id:
-            if "key-value" not in local_state:
-                return {}
-            return format_state(local_state["key-value"])
-    return {}
-
-
-# read app global state
-def read_global_state(client, addr, app_id):
-    results = client.account_info(addr)
-    apps_created = results["created-apps"]
-    for app in apps_created:
-        if app["id"] == app_id:
-            return format_state(app["params"]["global-state"])
-    return {}
-
-
 # delete application
 def delete_app(client, private_key, index):
     # declare sender
@@ -213,6 +172,7 @@ def close_out_app(client, private_key, index):
     # display results
     transaction_response = client.pending_transaction_info(tx_id)
     print("Closed out from app-id: ", transaction_response["txn"]["txn"]["apid"])
+
 
 # close out from application
 def clear_state_app(client, private_key, index):
@@ -272,11 +232,6 @@ def clear_app(client, private_key, index):
     print("Cleared app-id:", transaction_response["txn"]["txn"]["apid"])
 
 
-# convert 64 bit integer i to byte string
-def intToBytes(i):
-    return i.to_bytes(8, "big")
-
-
 def test_create_app(client, creator_private_key, election_end, num_vote_options, vote_options):
     # declare application state storage (immutable)
     local_ints = 1  # user's voted variable
@@ -310,8 +265,8 @@ def test_create_app(client, creator_private_key, election_end, num_vote_options,
 
     # create list of bytes for app args
     app_args = [
-        intToBytes(election_end),
-        intToBytes(num_vote_options),
+        int_to_bytes(election_end),
+        int_to_bytes(num_vote_options),
         vote_options
     ]
 
@@ -342,7 +297,8 @@ class TestSimpleElection(unittest.TestCase):
         vote_options = "ETH,ALGO"
 
         # test smart contract creation with large election end time
-        TestSimpleElection.app_id = test_create_app(client, account_private_keys[0], election_end, num_vote_options, vote_options)
+        TestSimpleElection.app_id = test_create_app(client, account_private_keys[0], election_end, num_vote_options,
+                                                    vote_options)
         time.sleep(1.5)
 
         # check global variables setup
@@ -418,7 +374,7 @@ class TestSimpleElection(unittest.TestCase):
         # check the global state of the app to make sure values were updated correctly
         global_state = read_global_state(client, account_addresses[0], TestSimpleElection.app_id)
         self.assertEqual(1, global_state[f"VotesFor{0}"])
-        self.assertEqual(0, global_state[f"VotesFor{1}"]) # used to be 1, now is 0
+        self.assertEqual(0, global_state[f"VotesFor{1}"])  # used to be 1, now is 0
 
     # delete the app as cleanup to not take up the creator's account's maximum app limit
     def test_99_delete_app(self):
