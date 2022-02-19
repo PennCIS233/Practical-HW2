@@ -183,7 +183,7 @@ Input your token and the private mnemonics of the accounts you want to register 
 
 #### Step 1.1: Main Conditional 
 
-The heart of the smart contract is a simple logical switch statement used to route evaluation to different sets of logic based on a Transaction's `OnComplete` value (defined in `create_app`). This logic allows the contract to choose which operation to run based on how the contract is called. For example, if `Txn.application_id()` is 0, then the on_creation sequence will run. If `Txn.on_completion()` is `OnComplete.OptIn`, the `on_register` sequence will run. We've completed the first few cases for you.
+The heart of the smart contract is a simple logical switch statement used to route evaluation to different sets of logic based on a Transaction's `OnComplete` value (defined in `create_app`). This logic allows the contract to choose which operation to run based on how the contract is called. For example, if `Txn.application_id()` is 0, then the on_creation sequence will run. If `Txn.on_completion()` is `OnComplete.OptIn`, the `on_register` sequence will run. If `Txn.application_args[0] == Bytes("vote")` then we want the `on_vote` sequence to be called. We've completed the first few cases for you.
 
 **TODO:** Implement the `program` conditional. 
 
@@ -219,7 +219,7 @@ Although there are many ways to store the vote options, for the purposes of this
 - Only the creator can approve or disapprove users and users can only be approved before the election ends.
 - Think about how the given user's address and creator's decision are stored
 
-`on_update_user_status` variables:
+The `on_update_user_status` sequence expects the following values in arguments 1 and 2 of the `Txn.application_args` array:
 - `address_to_approve` (bytes): 32-byte address that creator wants to approve/disapprove
 - `is_user_approved` (bytes): “yes” if creator wants address to be able to vote, “no” if the creator wants address to not be able to vote
 
