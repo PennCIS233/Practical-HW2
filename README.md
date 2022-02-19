@@ -422,4 +422,4 @@ Components:
 
 We highly recommend taking a look at the files themselves, so that you have a good sense of how the frontend works so that when you complete the extension of this project!
 
-You can try running the app in your Chrome browser by running `npm start` in the `frontend/voting-app` folder.
+You can try running the app in your Chrome browser by running `npm start` in the `frontend/voting-app` folder. 
