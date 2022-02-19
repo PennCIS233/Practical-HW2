@@ -96,7 +96,7 @@ function ElectionPage() {
    */
   useEffect(() => {
     refreshState();
-  }, []);
+  }, [refreshState]);
 
   /* handleMainAccountChange
    * Description:
