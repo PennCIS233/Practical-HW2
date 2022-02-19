@@ -33,8 +33,11 @@ client = algod.AlgodClient(
 )
 
 
-# opt-in to application
+
 def opt_in_app(client, private_key, index):
+    
+    ''' OPT IN TO APPLICATION '''
+    
     # declare sender
     sender = account.address_from_private_key(private_key)
     print("OptIn from account: ", sender)
@@ -64,7 +67,9 @@ def opt_in_app(client, private_key, index):
 
 
 def call_app_approve_voter(client, index, creator_private_key, user_address, yes_or_no_bytes):
-    # user_address = app_args[1]
+    
+    ''' CREATOR TO APPROVE VOTER ''' 
+    
     app_args = [b"update_user_status", decode_address(user_address), yes_or_no_bytes]
     # declare sender
     sender = account.address_from_private_key(creator_private_key)
@@ -90,8 +95,11 @@ def call_app_approve_voter(client, index, creator_private_key, user_address, yes
     print("Approved user ", user_address, "for apid ", transaction_response, ": ", yes_or_no_bytes)
 
 
-# call application
+
 def call_app(client, private_key, index, app_args):
+    
+    ''' CALL APPLICATION '''
+    
     # declare sender
     sender = account.address_from_private_key(private_key)
     print("Call from account:", sender)
@@ -116,8 +124,11 @@ def call_app(client, private_key, index, app_args):
     wait_for_confirmation(client, tx_id)
 
 
-# delete application
+
 def delete_app(client, private_key, index):
+    
+    ''' DELETE APPLICATION '''
+    
     # declare sender
     sender = account.address_from_private_key(private_key)
 
@@ -145,8 +156,11 @@ def delete_app(client, private_key, index):
     print("Deleted app-id:", transaction_response["txn"]["txn"]["apid"])
 
 
-# close out from application
+
 def close_out_app(client, private_key, index):
+    
+   ''' CLOSE OUT FROM APPLICATION '''
+
     # declare sender
     sender = account.address_from_private_key(private_key)
 
@@ -174,8 +188,11 @@ def close_out_app(client, private_key, index):
     print("Closed out from app-id: ", transaction_response["txn"]["txn"]["apid"])
 
 
-# close out from application
+
 def clear_state_app(client, private_key, index):
+    
+    ''' CLEAR STATE OF APPLICATION '''
+    
     # declare sender
     sender = account.address_from_private_key(private_key)
 
@@ -203,7 +220,6 @@ def clear_state_app(client, private_key, index):
     print("Clear state from app-id: ", transaction_response["txn"]["txn"]["apid"])
 
 
-# clear application
 def clear_app(client, private_key, index):
     # declare sender
     sender = account.address_from_private_key(private_key)
@@ -233,6 +249,9 @@ def clear_app(client, private_key, index):
 
 
 def test_create_app(client, creator_private_key, election_end, num_vote_options, vote_options):
+    
+    ''' TEST CREATION OF APPLICATION '''
+    
     # declare application state storage (immutable)
     local_ints = 1  # user's voted variable
     local_bytes = 1  # user's can_vote variable
@@ -285,7 +304,9 @@ def test_create_app(client, creator_private_key, election_end, num_vote_options,
 
 
 class TestSimpleElection(unittest.TestCase):
-    # tests the creation and initial variable setup
+    
+    ''' tests the creation and initial variable setup'''
+    
     def test_01_create_election(self):
         print(f"Testing election deployment/creation")
 
@@ -309,8 +330,11 @@ class TestSimpleElection(unittest.TestCase):
         for i in range(0, 2):
             self.assertEqual(global_state[f"VotesFor{i}"], 0, f"VotesFor{i} not initialized to 0")
 
-    # tests two users opting in to contract
+    
     def test_02_opt_in(self):
+        
+        ''' tests two users opting in to contract '''
+        
         for i in range(0, 2):
             print(f"Testing account {account_addresses[i]} opt-in")
 
@@ -321,8 +345,11 @@ class TestSimpleElection(unittest.TestCase):
 
             print("-------------------------------------------------------------------------------")
 
-    # tests the "yes" approval of two users
+    
     def test_03_approve_users(self):
+        
+        ''' tests the "yes" approval of two users '''
+        
         for i in range(0, 2):
             print(f"Testing creator approving {account_addresses[i]}")
 
@@ -342,8 +369,11 @@ class TestSimpleElection(unittest.TestCase):
 
             print("-------------------------------------------------------------------------------")
 
-    # tests approved users trying to vote
+   
     def test_04_voting(self):
+        
+        ''' tests approved users trying to vote '''
+        
         for i in range(0, 2):
             print(f"Testing account {account_addresses[i]} voting for option {i}")
 
@@ -364,8 +394,11 @@ class TestSimpleElection(unittest.TestCase):
 
             print("-------------------------------------------------------------------------------")
 
-    # test closeout functionality on approved user 1, note: this happens before the election end
+    
     def test_05_closeout(self):
+        
+        ''' test closeout functionality on approved user 1, note: this happens before the election end '''
+        
         print(f"Testing close out of account {account_addresses[1]}")
         # close out of the app (note this is happening before the election end)
         close_out_app(client, account_private_keys[1], TestSimpleElection.app_id)
@@ -376,8 +409,11 @@ class TestSimpleElection(unittest.TestCase):
         self.assertEqual(1, global_state[f"VotesFor{0}"])
         self.assertEqual(0, global_state[f"VotesFor{1}"])  # used to be 1, now is 0
 
-    # delete the app as cleanup to not take up the creator's account's maximum app limit
+    
     def test_99_delete_app(self):
+        
+        ''' delete the app as cleanup to not take up the creator's account's maximum app limit '''
+        
         print(f"Deleting app {TestSimpleElection.app_id}")
         delete_app(client, account_private_keys[0], TestSimpleElection.app_id)
 
