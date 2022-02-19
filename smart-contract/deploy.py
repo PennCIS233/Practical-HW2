@@ -13,10 +13,6 @@ global_schema = transaction.StateSchema(global_ints, global_bytes)
 local_schema = transaction.StateSchema(local_ints, local_bytes)
 
 
-# TODO
-# Implement the functions below that create the logic for every interaction with the smart contract:
-# creation, opt-in, approval, vote
-
 
 def create_app(client, private_key, approval_program, clear_program, global_schema, local_schema, app_args):
     """
