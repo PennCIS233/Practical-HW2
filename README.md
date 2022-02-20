@@ -185,6 +185,8 @@ Input your token and the private mnemonics of the accounts you want to register 
 
 The heart of the smart contract is a simple logical switch statement used to route evaluation to different sets of logic based on a Transaction's `OnComplete` value (defined in `create_app`). This logic allows the contract to choose which operation to run based on how the contract is called. For example, if `Txn.application_id()` is 0, then the on_creation sequence will run. If `Txn.on_completion()` is `OnComplete.OptIn`, the `on_register` sequence will run. If `Txn.application_args[0] == Bytes("vote")` then we want the `on_vote` sequence to be called. We've completed the first few cases for you.
 
+**Note:** What you end up passing into `application_args[0]` is the identifier in the transaction for the action to perform. In this case, there are two main actions we want to check for: when an account wants to vote and when the creator wants to update the user’s voting status. Make sure the name of the identifier that is passed into `application_args[0]` is “vote” for the first action and “update_user_status” for the second action.
+
 **TODO:** Implement the `program` conditional. 
 
 #### Step 1.2: Creation
