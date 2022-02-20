@@ -29,7 +29,7 @@ class AlgoHandler {
    */
   async getAlgoSignerAccounts() {
     // This variable will be returned after populated
-    var accounts = [];
+    let accounts = [];
 
     // Attempt to connect to AlgoSigner, note you will have to use the "await" keyword
     // If this fails or an error occurs, return an empty array
@@ -254,6 +254,6 @@ class AlgoHandler {
 }
 
 // create and export a singular AlgoHandler instance
-var mainAlgoHandler = new AlgoHandler();
+const mainAlgoHandler = new AlgoHandler();
 
 export default mainAlgoHandler;
