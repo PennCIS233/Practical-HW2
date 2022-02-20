@@ -29,7 +29,7 @@ class AlgoHandler {
    */
   async getAlgoSignerAccounts() {
     // This variable will be returned after populated
-    var accounts = [];
+    let accounts = [];
 
     // Attempt to connect to AlgoSigner, note you will have to use the "await" keyword
     // If this fails or an error occurs, return an empty array
@@ -204,6 +204,8 @@ class AlgoHandler {
     // Strings need to be encoded into Uint8Array
     // Addresses, *only* when passed as *arguments*, need to be decoded with algosdk inbuilt 
     // decodeAddress function and have their public key value used
+    // The first argument should be the identifier of the smart contract method.
+    // In this case the identifier is "update_user_status"
     // TODO -----------------------------------------------------------------------------
 
     // Create the transaction with proper app argument array
@@ -225,6 +227,8 @@ class AlgoHandler {
    * @param {number} appID - App ID (aka index) of the smart contract app.
    */
   async vote(address, optionIndex, appID) {
+    // The first argument should be the identifier of the smart contract method.
+    // In this case the identifier is "vote"
     // TODO -----------------------------------------------------------------------------
   }
 
@@ -250,6 +254,6 @@ class AlgoHandler {
 }
 
 // create and export a singular AlgoHandler instance
-var mainAlgoHandler = new AlgoHandler();
+const mainAlgoHandler = new AlgoHandler();
 
 export default mainAlgoHandler;
