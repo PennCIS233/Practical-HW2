@@ -68,7 +68,7 @@ def opt_in_app(client, private_key, index):
 
 def call_app_approve_voter(client, index, creator_private_key, user_address, yes_or_no_bytes):
     
-    ''' CREATOR TO APPROVE VOTER ''' 
+    """ CREATOR TO APPROVE VOTER """
     
     app_args = [b"update_user_status", decode_address(user_address), yes_or_no_bytes]
     # declare sender
@@ -98,7 +98,7 @@ def call_app_approve_voter(client, index, creator_private_key, user_address, yes
 
 def call_app(client, private_key, index, app_args):
     
-    ''' CALL APPLICATION '''
+    """ CALL APPLICATION """
     
     # declare sender
     sender = account.address_from_private_key(private_key)
@@ -127,7 +127,7 @@ def call_app(client, private_key, index, app_args):
 
 def delete_app(client, private_key, index):
     
-    ''' DELETE APPLICATION '''
+    """ DELETE APPLICATION """
     
     # declare sender
     sender = account.address_from_private_key(private_key)
@@ -159,7 +159,7 @@ def delete_app(client, private_key, index):
 
 def close_out_app(client, private_key, index):
     
-   ''' CLOSE OUT FROM APPLICATION '''
+   """ CLOSE OUT FROM APPLICATION """
 
     # declare sender
     sender = account.address_from_private_key(private_key)
@@ -191,7 +191,7 @@ def close_out_app(client, private_key, index):
 
 def clear_state_app(client, private_key, index):
     
-    ''' CLEAR STATE OF APPLICATION '''
+    """ CLEAR STATE OF APPLICATION """
     
     # declare sender
     sender = account.address_from_private_key(private_key)
@@ -250,7 +250,7 @@ def clear_app(client, private_key, index):
 
 def test_create_app(client, creator_private_key, election_end, num_vote_options, vote_options):
     
-    ''' TEST CREATION OF APPLICATION '''
+    """ TEST CREATION OF APPLICATION """
     
     # declare application state storage (immutable)
     local_ints = 1  # user's voted variable
@@ -305,9 +305,12 @@ def test_create_app(client, creator_private_key, election_end, num_vote_options,
 
 class TestSimpleElection(unittest.TestCase):
     
-    ''' tests the creation and initial variable setup'''
+    """ PROVIDE TESTS FOR BASIC FUNCTIONALITIES """ 
     
     def test_01_create_election(self):
+        
+        """ tests the creation and initial variable setup """
+        
         print(f"Testing election deployment/creation")
 
         relative_election_end = 5000
@@ -333,7 +336,7 @@ class TestSimpleElection(unittest.TestCase):
     
     def test_02_opt_in(self):
         
-        ''' tests two users opting in to contract '''
+        """ tests two users opting in to contract """
         
         for i in range(0, 2):
             print(f"Testing account {account_addresses[i]} opt-in")
@@ -348,7 +351,7 @@ class TestSimpleElection(unittest.TestCase):
     
     def test_03_approve_users(self):
         
-        ''' tests the "yes" approval of two users '''
+        """ tests the "yes" approval of two users """
         
         for i in range(0, 2):
             print(f"Testing creator approving {account_addresses[i]}")
@@ -372,7 +375,7 @@ class TestSimpleElection(unittest.TestCase):
    
     def test_04_voting(self):
         
-        ''' tests approved users trying to vote '''
+        """ tests approved users trying to vote """
         
         for i in range(0, 2):
             print(f"Testing account {account_addresses[i]} voting for option {i}")
@@ -397,7 +400,7 @@ class TestSimpleElection(unittest.TestCase):
     
     def test_05_closeout(self):
         
-        ''' test closeout functionality on approved user 1, note: this happens before the election end '''
+        """ test closeout functionality on approved user 1, note: this happens before the election end """
         
         print(f"Testing close out of account {account_addresses[1]}")
         # close out of the app (note this is happening before the election end)
@@ -412,7 +415,7 @@ class TestSimpleElection(unittest.TestCase):
     
     def test_99_delete_app(self):
         
-        ''' delete the app as cleanup to not take up the creator's account's maximum app limit '''
+        """ delete the app as cleanup to not take up the creator's account's maximum app limit """
         
         print(f"Deleting app {TestSimpleElection.app_id}")
         delete_app(client, account_private_keys[0], TestSimpleElection.app_id)
