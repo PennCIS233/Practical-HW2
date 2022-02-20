@@ -390,12 +390,13 @@ In `frontend/src/utils/AlgoHandler.js` fill out the following 6 functions with t
     - **TODO:** Sign and send the transaction with our `this.signAndSend` function
 3.  `updateUserStatus(creatorAddress, userAddress, yesOrNo, appID)`
     - **TODO:** Get the suggested params from `this.algodClient`
-    - **TODO:** Set up the transaction app arguments
+    - **TODO:** Set up the transaction app arguments (remember the first argument should be the smart contract method identifier, in this case that's `"update_user_status"` )
     - **TODO:** Create the transaction
       - Include both the creator's address and user's address in the optional address array when creating the transaction (different from app args)
     - **TODO:** Sign and send the transaction with our `this.signAndSend` function
 4.  `vote(address, optionIndex, appID)`
-    - **TODO:** Create app parameters, create transaction, sign and send
+    - **TODO:** Create app parameters (remember the first argument should be the smart contract method identifier, in this case that's `"vote"` )
+    - **TODO**, create transaction, sign and send
 5.  `closeOut(address, appID)`
     - **TODO:** Create transaction, sign and send, similar to above
 6.  `clearState(address, appID)`
