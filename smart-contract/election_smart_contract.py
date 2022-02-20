@@ -12,10 +12,10 @@ def approval_program():
     
     on_creation = Seq(
         [   
-            #TODO:
-            #Check number of required arguments are present
-            #Store relevant parameters of the election. When storing the options to vote for, consider storing all of them as a string separated by commas e.g: "A,B,C,D". Note that index-wise, A=0, B=1, C=2, D=3
-            #Set all initial vote tallies to 0 for all vote options, keys are the vote options
+            # TODO:
+            # Check number of required arguments are present
+            # Store relevant parameters of the election. When storing the options to vote for, consider storing all of them as a string separated by commas e.g: "A,B,C,D". Note that index-wise, A=0, B=1, C=2, D=3
+            # Set all initial vote tallies to 0 for all vote options, keys are the vote options
             
             For(
                 
@@ -93,8 +93,8 @@ def approval_program():
 
 def clear_state_program():
     
-    ''' TODO: CLEAR STATE PROGRAM '''
-    ''' This handles the logic of when an account clears its participation in a smart contract. '''
+    """ TODO: CLEAR STATE PROGRAM """
+    """ This handles the logic of when an account clears its participation in a smart contract. """
     
     get_vote_of_sender = App.localGetEx(Int(0), App.id(), Bytes("voted"))
 
@@ -112,6 +112,7 @@ def clear_state_program():
 
 
 if __name__ == "__main__":
+    
     with open("vote_approval.teal", "w") as f:
         compiled = compileTeal(approval_program(), mode=Mode.Application, version=5)
         f.write(compiled)
