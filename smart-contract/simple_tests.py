@@ -36,7 +36,7 @@ client = algod.AlgodClient(
 
 def opt_in_app(client, private_key, index):
     
-    ''' OPT IN TO APPLICATION '''
+    """ OPT IN TO APPLICATION """
     
     # declare sender
     sender = account.address_from_private_key(private_key)
