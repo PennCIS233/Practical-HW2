@@ -136,6 +136,18 @@ function ElectionPage() {
               optedAccounts={optedAccounts}
               electionChoices={electionChoices}
             />
+          </Col>
+
+          <Col>
+            <ElectionInfoCard
+              currVotes={totalVotes}
+              appID={appID}
+              state={electionState}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col>
             {accounts.length > 0 && (
               <VoterCard
                 user={mainAccount}
@@ -148,14 +160,6 @@ function ElectionPage() {
                 electionChoices={electionChoices}
               />
             )}
-          </Col>
-
-          <Col>
-            <ElectionInfoCard
-              currVotes={totalVotes}
-              appID={appID}
-              state={electionState}
-            />
           </Col>
         </Row>
       </Container>
