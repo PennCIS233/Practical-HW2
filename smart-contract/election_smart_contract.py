@@ -29,7 +29,7 @@ def approval_program():
     )
 
    # call to determine whether the current transaction sender is the creator
-    is_creator = Txn.sender() == App.globalGet(Bytes("Creator"))
+    is_creator = Txn.sender() == Global.creator_address()
     
     # value of whether or not the sender can vote ("yes", "no", or "maybe")
     get_sender_can_vote = App.localGetEx(Int(0), App.id(), Bytes("can_vote"))
