@@ -38,6 +38,22 @@ function ElectionInfoCard(props) {
     ],
   };
 
+  /**
+   * Estimate the end date of the election.
+   * @param {number} latestRound - latest round as a number.
+   * @param {number} endRound - end round of the election as a number.
+   * @returns {string} - human readable date as a string.
+   */
+  const estimateEndDate = (latestRound, endRound) => {
+    const secondsPerRound = 4.5;
+
+    let roundToSeconds = (endRound - latestRound) * secondsPerRound;
+    let date = new Date(Date.now());
+    date.setSeconds(roundToSeconds);
+
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()}`;
+  }
+
   /*
    * Render the card with a list of election info, as well as a pie chart
    * with the number of votes for each choice.
@@ -48,12 +64,23 @@ function ElectionInfoCard(props) {
         <Card.Title>Election Info</Card.Title>
         <ListGroup>
           <ListGroup.Item>
-            <b>Creator Address: </b>
-            {props.state["Creator"] ? props.state["Creator"] : ""}
+            <b>App ID: </b>
+            <a href={"https://testnet.algoexplorer.io/application/" + props.appID} target="_blank">{props.appID}</a>
           </ListGroup.Item>
           <ListGroup.Item>
-            <b>Last Round to Vote: </b>
-            {props.state["ElectionEnd"]}
+            <b>Creator Address: </b>
+            <a href={"https://testnet.algoexplorer.io/address/" + props.state["Creator"]} target="_blank">{props.state["Creator"] ? props.state["Creator"] : ""}</a>
+          </ListGroup.Item>
+          <ListGroup.Item>
+            <b>Most Recent Round: </b>
+            {props.latestRound}
+          </ListGroup.Item>
+          <ListGroup.Item>
+            <b>Election End Round: </b>
+            <span className={props.latestRound >= props.state["ElectionEnd"] ? "text-danger" : ""}>{props.state["ElectionEnd"]} </span> 
+            {props.latestRound < props.state["ElectionEnd"] && 
+              <span>(estimated {estimateEndDate(props.latestRound, props.state["ElectionEnd"])})</span>
+            }
           </ListGroup.Item>
           <ListGroup.Item>
             <b>Vote Options:</b> {props.state["VoteOptions"]}
