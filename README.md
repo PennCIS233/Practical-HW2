@@ -144,9 +144,6 @@ Smart contracts are implemented using two programs:
 
 For standardization, we require everyone use the same global variable names in the approval program of the smart contract.
 
-`Creator` (bytes)
-
-- 32-byte address of the deployer of the smart contract
 
 `ElectionEnd` (int)
 
