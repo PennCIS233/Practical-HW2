@@ -31,7 +31,7 @@ class AlgoHandler {
   /**
    * Attempts to connect to the accounts present in the browser's AlgoSigner addon.
    *
-   * @return {string[]} - array of all account addresses in string format.
+   * @returns {string[]} - array of all account addresses in string format.
    */
   async getAlgoSignerAccounts() {
     // This variable will be returned after populated
@@ -61,11 +61,22 @@ class AlgoHandler {
     return Buffer.from(encodedString, "base64").toString();
   }
 
+  /**
+   * Retrieves and returns the last Algorand TestNet round
+   * @returns {Number} - the last Algorand TestNet round
+   */
+  async getLatestRound() {
+    // Retrieve the algod client status
+    // Return the "last-round" value from that status
+    // TODO -----------------------------------------------------------------------------
+    return 0;
+  }
+
   /** 
    * Retrieves and returns the current global variable values in the given app (appID).
    *
    * @param {number} appID - App ID (aka index) of the Algorand smart contract app.
-   * @return {object} - Javascript object of election variables mapped to their respective values.
+   * @returns {object} - Javascript object of election variables mapped to their respective values.
    * 
    * @example 
    * // returns 
@@ -121,7 +132,7 @@ class AlgoHandler {
    * Finds all accounts that have opted-in to the specified app and returns their local states.
    *
    * @param {number} appID - App ID (aka index) of the Algorand smart contract app.
-   * @return {object} - Object of addresses mapped to an object of the addresses' key-value 
+   * @returns {object} - Object of addresses mapped to an object of the addresses' key-value 
    * local state.
    * 
    * @example 
