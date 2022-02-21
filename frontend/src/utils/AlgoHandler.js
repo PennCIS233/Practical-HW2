@@ -1,5 +1,5 @@
 try {
-  const secrets = require("./secrets.js"); // create your secrets.js file using the template
+  const secrets = require("./secrets"); // create your secrets.js file using the template
 } catch {
   console.log("You need to setup frontend/src/utils/secrets.js using the secrets.template.js file");
   alert("You need to setup frontend/src/utils/secrets.js using the secrets.template.js file");
