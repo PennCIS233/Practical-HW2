@@ -1,4 +1,10 @@
-import { secrets } from "./secrets"; // create your secrets.js file using the template
+try {
+  const secrets = require("./secrets"); // create your secrets.js file using the template
+} catch {
+  console.log("You need to setup frontend/src/utils/secrets.js using the secrets.template.js file");
+  alert("You need to setup frontend/src/utils/secrets.js using the secrets.template.js file");
+}
+
 const algosdk = require("algosdk");
 
 // This will handle all algosdk, indexer, and AlgoSigner code
@@ -78,6 +84,7 @@ class AlgoHandler {
 
     // Use the algodClient to get the the app details
     // TODO -----------------------------------------------------------------------------
+    let app = {};
 
     // The data might have a complex structure, feel free to console.log it to see the structure
 
