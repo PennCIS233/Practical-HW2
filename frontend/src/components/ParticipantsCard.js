@@ -76,7 +76,7 @@ function ParticipantsCard(props) {
                       {user.substring(0, 20) + "..."}
                     </Accordion.Header>
                     <Accordion.Body>
-                      <b>User Address:</b> {user}
+                      <b>User Address:</b> <a href={"https://testnet.algoexplorer.io/address/" + user} target="_blank">{user}</a>
                       <br />
                       {props.electionChoices[props.userVotes[user]] && (
                         <div>
@@ -101,7 +101,7 @@ function ParticipantsCard(props) {
                       {user.substring(0, 20) + "..."}
                     </Accordion.Header>
                     <Accordion.Body>
-                      <b>User Address:</b> {user}
+                      <b>User Address:</b> <a href={"https://testnet.algoexplorer.io/address/" + user} target="_blank">{user}</a>
                     </Accordion.Body>
                   </Accordion.Item>
                 ))}
@@ -119,7 +119,7 @@ function ParticipantsCard(props) {
                       {user.substring(0, 20) + "..."}
                     </Accordion.Header>
                     <Accordion.Body>
-                      <b>User Address:</b> {user}
+                      <b>User Address:</b> <a href={"https://testnet.algoexplorer.io/address/" + user} target="_blank">{user}</a>
                       {props.isCreator && (
                         <div>
                           <ButtonGroup className="mt-1">
