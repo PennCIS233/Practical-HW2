@@ -69,9 +69,7 @@ Once you have Google Chrome installed add the AlgoSigner extension at this [link
 In Practical Homework 1 you created two Algorand accounts. Account A and Account B. Once you have Algorand installed on Chrome do the following.
 
 - Import Account A and Account B into AlgoSigner **on the TestNet**
-  - Save the addresses in form.md
 - Create 2 new accounts Account C and Account D using AlgoSigner **on the TestNet**
-  - Save the addresses in form.md
 
 A walkthrough on how to do both of these can be seen here:  
 [https://www.youtube.com/watch?v=tG-xzG8r770](https://www.youtube.com/watch?v=tG-xzG8r770)
