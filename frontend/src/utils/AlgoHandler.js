@@ -91,10 +91,7 @@ class AlgoHandler {
 
       // Bytes values need to be decoded
       // Addresses stored as bytes need a special decoding process which we have done for you :)
-      let bytesVal =
-        key == "Creator"
-          ? algosdk.encodeAddress(Buffer.from(x["value"]["bytes"], "base64"))
-          : this.base64ToString(x["value"]["bytes"]);
+      let bytesVal = this.base64ToString(x["value"]["bytes"]);
       
       // uint types don't need to be decoded
       let uintVal = x["value"]["uint"];
@@ -105,6 +102,9 @@ class AlgoHandler {
       // set the value for the key in our newState object to the correct value
       newState[key] = valType == 1 ? bytesVal : uintVal;
     }
+
+    // Add the creator's address
+    newState["Creator"] = app["params"]["creator"];
 
     // return the newState
     return newState;
