@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { ButtonGroup, Card, Button, Form } from "react-bootstrap";
+import {
+  ButtonGroup,
+  Card,
+  Button,
+  DropdownButton,
+  Dropdown,
+} from "react-bootstrap";
 import mainAlgoHandler from "../utils/AlgoHandler";
 
 /*
@@ -20,8 +26,8 @@ function VoterCard(props) {
    * Description:
    *  Updates the states when the user changes their vote option
    */
-  const handleVoteSelect = (e) => {
-    setVoteChoice(e.target.value);
+  const handleVoteSelect = (choice) => {
+    setVoteChoice(choice);
   };
 
   /* handleVoteSubmit
@@ -71,7 +77,7 @@ function VoterCard(props) {
    * they vote, they can clear state / close out.
    */
   return (
-    <Card className="h-50 mt-1">
+    <Card className="mt-4 mb-4 text-center">
       {!props.isPending && !props.isAccepted && !props.isRejected && (
         <Card.Body>
           <Card.Title>Opt-In to the Election</Card.Title>
@@ -79,11 +85,9 @@ function VoterCard(props) {
             To participate in the election, you must opt-in. If the creator of
             the election accepts, you can vote!
           </Card.Text>
-          <Form onSubmit={handleOptIn}>
-            <Button variant="info" type="submit">
-              Opt-In
-            </Button>
-          </Form>
+          <Button variant="info" onClick={handleOptIn}>
+            Opt-In
+          </Button>
         </Card.Body>
       )}
 
@@ -100,23 +104,28 @@ function VoterCard(props) {
         <div>
           <Card.Body>
             <Card.Title>Cast Your Vote</Card.Title>
-            <Form onSubmit={handleVoteSubmit}>
-              <Form.Group controlId="vote-options">
+            <Card.Text>Use the dropdown below to select your vote!</Card.Text>
+            <ButtonGroup>
+              <DropdownButton
+                variant="info"
+                title={`Option ${voteChoice}`}
+                id="voteOptions"
+              >
                 {props.electionChoices.map((choice) => (
-                  <Form.Check
-                    type="radio"
+                  <Dropdown.Item
                     key={choice}
                     value={choice}
-                    name="choices"
-                    label={choice}
-                    onChange={handleVoteSelect}
-                  />
+                    onClick={() => handleVoteSelect(choice)}
+                  >
+                    {choice}
+                  </Dropdown.Item>
                 ))}
-              </Form.Group>
-              <Button variant="info" type="submit">
+              </DropdownButton>
+
+              <Button variant="info" onClick={handleVoteSubmit}>
                 Vote
               </Button>
-            </Form>
+            </ButtonGroup>
           </Card.Body>
         </div>
       )}

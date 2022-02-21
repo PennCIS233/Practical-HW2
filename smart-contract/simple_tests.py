@@ -17,7 +17,7 @@ from election_smart_contract import approval_program, clear_state_program
 from secrets import account_mnemonics, algod_headers
 
 from deploy import create_app
-from helper import compile_program, wait_for_confirmation
+from helper import compile_program, wait_for_confirmation, int_to_bytes, read_global_state, read_local_state
 
 account_private_keys = [mnemonic.to_private_key(mn) for mn in account_mnemonics]
 account_addresses = [account.address_from_private_key(sk) for sk in account_private_keys]
@@ -36,7 +36,7 @@ client = algod.AlgodClient(
 
 def opt_in_app(client, private_key, index):
     
-    ''' OPT IN TO APPLICATION '''
+    """ OPT IN TO APPLICATION """
     
     # declare sender
     sender = account.address_from_private_key(private_key)
@@ -158,8 +158,8 @@ def delete_app(client, private_key, index):
 
 
 def close_out_app(client, private_key, index):
-    
-   """ CLOSE OUT FROM APPLICATION """
+
+    """ CLOSE OUT FROM APPLICATION """
 
     # declare sender
     sender = account.address_from_private_key(private_key)
@@ -327,7 +327,6 @@ class TestSimpleElection(unittest.TestCase):
 
         # check global variables setup
         global_state = read_global_state(client, account_addresses[0], TestSimpleElection.app_id)
-        self.assertEqual(global_state["Creator"], account_addresses[0], "Creator variable is NOT correct")
         self.assertEqual(global_state["VoteOptions"], vote_options, "VoteOptions variable is NOT correct")
         self.assertEqual(global_state["ElectionEnd"], election_end, "ElectionEnd variable is NOT correct")
         for i in range(0, 2):
