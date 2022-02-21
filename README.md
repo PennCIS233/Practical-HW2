@@ -144,9 +144,6 @@ Smart contracts are implemented using two programs:
 
 For standardization, we require everyone use the same global variable names in the approval program of the smart contract.
 
-`Creator` (bytes)
-
-- 32-byte address of the deployer of the smart contract
 
 `ElectionEnd` (int)
 
@@ -184,6 +181,8 @@ Input your token and the private mnemonics of the accounts you want to register 
 #### Step 1.1: Main Conditional 
 
 The heart of the smart contract is a simple logical switch statement used to route evaluation to different sets of logic based on a Transaction's `OnComplete` value (defined in `create_app`). This logic allows the contract to choose which operation to run based on how the contract is called. For example, if `Txn.application_id()` is 0, then the on_creation sequence will run. If `Txn.on_completion()` is `OnComplete.OptIn`, the `on_register` sequence will run. If `Txn.application_args[0] == Bytes("vote")` then we want the `on_vote` sequence to be called. We've completed the first few cases for you.
+
+**Note:** What you end up passing into `application_args[0]` is the identifier in the transaction for the action to perform. In this case, there are two main actions we want to check for: when an account wants to vote and when the creator wants to update the user’s voting status. Make sure the name of the identifier that is passed into `application_args[0]` is “vote” for the first action and “update_user_status” for the second action.
 
 **TODO:** Implement the `program` conditional. 
 
@@ -376,7 +375,7 @@ In `frontend/src/utils/AlgoHandler.js` fill out the following 4 functions with t
 
 ### Step 3.3 - Sending Transactions
 
-In `frontend/src/utils/AlgoHandler.js` fill out the following 6 functions with the commented functionality. Remember, don't change the function names. Feel free to add helper functions if you want. Remember to use JavaScript's `await` when using `this.algodClient`, `this.algodIndexer`, and `window.AlgoSigner`.
+In `frontend/src/utils/AlgoHandler.js` fill out the following 6 functions with the commented functionality. Remember, don't change the function names. Feel free to add helper functions if you want. Remember to use JavaScript's `await` when using `this.algodClient`, `this.algodIndexer`, and `window.AlgoSigner`
 
 #### Relevant Documentation
 
@@ -427,4 +426,4 @@ Components:
 
 We highly recommend taking a look at the files themselves, so that you have a good sense of how the frontend works so that when you complete the extension of this project!
 
-You can try running the app in your Chrome browser by running `npm start` in the `frontend/voting-app` folder.
+You can try running the app in your Chrome browser by running `npm start` in the `frontend/voting-app` folder. 
