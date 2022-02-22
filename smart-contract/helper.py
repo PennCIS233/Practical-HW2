@@ -51,6 +51,9 @@ def int_to_bytes(i: int):
 
 
 def format_state(state):
+    """
+    Format state assuming all keys and values are string
+    """
     formatted = {}
     for item in state:
         key = item["key"]
@@ -58,10 +61,7 @@ def format_state(state):
         formatted_key = base64.b64decode(key).decode("utf-8")
         if value["type"] == 1:
             # byte string
-            if formatted_key == "VoteOptions":
-                formatted_value = base64.b64decode(value["bytes"]).decode("utf-8")
-            else:
-                formatted_value = value["bytes"]
+            formatted_value = base64.b64decode(value["bytes"]).decode("utf-8")
             formatted[formatted_key] = formatted_value
         else:
             # integer
@@ -71,7 +71,7 @@ def format_state(state):
 
 def read_local_state(client, addr, app_id):
     """
-    Read user local state
+    Read user local state assuming all keys and values are string
     """
     results = client.account_info(addr)
     for local_state in results["apps-local-state"]:
@@ -84,7 +84,7 @@ def read_local_state(client, addr, app_id):
 
 def read_global_state(client, app_id):
     """
-    Read global state
+    Read global state assuming all keys and values are string
     """
     app = client.application_info(app_id)
     if "global-state" in app["params"]:

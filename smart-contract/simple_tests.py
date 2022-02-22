@@ -14,7 +14,7 @@ from pyteal import compileTeal, Mode
 from election_smart_contract import approval_program, clear_state_program
 
 # fill in your secret mnemonics and algod_headers in secrets.py
-from secrets import account_mnemonics, algod_headers
+from secrets import account_mnemonics, algod_headers, algod_address
 
 from deploy import create_app
 from helper import compile_program, wait_for_confirmation, int_to_bytes, read_global_state, read_local_state
@@ -22,13 +22,10 @@ from helper import compile_program, wait_for_confirmation, int_to_bytes, read_gl
 account_private_keys = [mnemonic.to_private_key(mn) for mn in account_mnemonics]
 account_addresses = [account.address_from_private_key(sk) for sk in account_private_keys]
 
-# user declared algod connection parameters
-algod_address = "https://testnet-algorand.api.purestake.io/ps2"
-
 # algod client
 client = algod.AlgodClient(
     algod_token="",
-    algod_address="https://testnet-algorand.api.purestake.io/ps2",
+    algod_address=algod_address,
     headers=algod_headers
 )
 
