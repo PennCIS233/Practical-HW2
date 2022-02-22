@@ -78,6 +78,8 @@ A walkthrough on how to do this can be seen here:
 
 In the same way as Practical Homework 1, in order to use your accounts they need to be funded. Use a [dispenser](https://bank.testnet.algorand.network/) to fund the accounts if they do not have Algos.
 
+Note that if you successfully finished Practical Homework 1, your two accounts must already have Algos in it and you can skip those tests.
+
 ### Step 0.4 - Install PyTeal
 
 Install the PyTeal library, `pyteal`, by typing this into your terminal:
@@ -193,6 +195,8 @@ The heart of the smart contract is a simple logical switch statement used to rou
 
 Although there are many ways to store the vote options, for the purposes of this project, we want you to store them as a string of options separated by commas e.g., "A,B,C,D". Note that index-wise, A=0, B=1, C=2, D=3. 
 
+You can use the function `itoa` from `pyteal_helper.py`
+
 #### 1.3 Close-out
 
 **TODO:** Implement `on_closeout`, which is called when user removes interaction with this smart contract from their account.
@@ -250,7 +254,7 @@ In the deploy script, you will deploy the voting contract using an ApplicationCa
 - `local_schema`: maximum local storage allocation, immutable
 - `global_schema`: maximum global storage allocation, immutable
 
-
+You can use helper functions from `helper.py`, that you can import from example via `from helper import compile_program`.
 
 **TODO:** Implement `create_vote_app`. First, compile the approval and clear state programs to TEAL assembly, then to binary. Create the application and the application arguments which should include a list of election parameters you defined previously as global variables: `election_end`, `num_vote_options`, `vote_options`.
 
@@ -261,6 +265,10 @@ In the deploy script, you will deploy the voting contract using an ApplicationCa
 
 Test your smart contract functions by running the testing script simple_tests.py. Feel free to add your own tests as the ones we have provided are not comprehensive. We only test that basic functionalities are working, namely the creation and initial variable setup, two users opting in, the creator correctly approving two users, approved users being able to vote, and closing out the app. 
 
+You can make the tests more verbose by specifying the `-v` option:
+```bash
+python3 simple_tests.py -v
+```
 
 ## Step 3 - Frontend Logic: `AlgoHandler.js`
 
