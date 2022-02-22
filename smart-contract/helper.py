@@ -82,13 +82,11 @@ def read_local_state(client, addr, app_id):
     return {}
 
 
-def read_global_state(client, addr, app_id):
+def read_global_state(client, app_id):
     """
     Read global state
     """
-    results = client.account_info(addr)
-    apps_created = results["created-apps"]
-    for app in apps_created:
-        if app["id"] == app_id:
-            return format_state(app["params"]["global-state"])
+    app = client.application_info(app_id)
+    if "global-state" in app["params"]:
+        return format_state(app["params"]["global-state"])
     return {}
