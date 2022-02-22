@@ -222,7 +222,7 @@ The `on_update_user_status` sequence expects the following values in arguments 1
 #### 1.6 User Voting Logic:
 
 **TODO:** Implement `on_vote`, a function that is called when the txn sender/user votes. The logic in this sequence properly casts a user's vote and updates the local and global states accordingly.
-- [Assert](https://pyteal.readthedocs.io/en/stable/control_structures.html#checking-conditions-assert) that the election isn't over and that user is allowed to vote using get_sender_can_vote.
+- [Assert](https://pyteal.readthedocs.io/en/stable/control_structures.html#checking-conditions-assert) that the election isn't over and that user is allowed to vote using `get_sender_can_vote`.
 - Check using `get_vote_of_sender` to check if the user has already voted. If so, return a 0. Otherwise, get the choice that the user wants to vote for from the application arguments.
 - [Assert](https://pyteal.readthedocs.io/en/stable/control_structures.html#checking-conditions-assert) that the vote choice is within index bounds of the vote options.
 - Update the vote tally for the user's choice under the corresponding global variables.
