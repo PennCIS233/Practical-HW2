@@ -69,14 +69,14 @@ In Practical Homework 1 you created two Algorand accounts. Account A and Account
 - Create 2 new accounts Account C and Account D using AlgoSigner **on the TestNet**
 - Create as many other accounts as you would like
 
-A walkthrough on how to do both of this can be seen here:  
+A walkthrough on how to do this can be seen here:  
 [https://www.youtube.com/watch?v=tG-xzG8r770](https://www.youtube.com/watch?v=tG-xzG8r770)
 
 **Remember to save and safeguard your password and mnemonics!**
 
 ### Step 0.3 - Fund AlgoSigner Accounts
 
-In the same way as Practical Homework 1, in order to use your accounts you need to fund them. Use a [dispenser](https://bank.testnet.algorand.network/) to fund the accounts if needed.
+In the same way as Practical Homework 1, in order to use your accounts they need to be funded. Use a [dispenser](https://bank.testnet.algorand.network/) to fund the accounts if they do not have Algos.
 
 ### Step 0.4 - Install PyTeal
 
@@ -211,7 +211,7 @@ Although there are many ways to store the vote options, for the purposes of this
 
 **TODO:** Implement `on_update_user_status`, which is called when creator wants to approve/disapprove of a user who opted-in the election.
 - Fetch the creator's decision to approve or reject a user acccount and update user's voting status accordingly.
-- Only the creator of the smart contract can approve or disapprove users and users can only be approved before the election ends. The creator cannot update a given user's status more than once.
+- [Assert](https://pyteal.readthedocs.io/en/stable/control_structures.html#checking-conditions-assert) the following: only the creator of the smart contract can approve or disapprove users and users can only be approved before the election ends and the creator cannot update a given user's status more than once.
 - Think about how the given user's address and creator's decision are stored
 - You should set the user's `can_vote` local state variable to what the creator has decided: `"yes"` or `"no"`
 
@@ -222,9 +222,9 @@ The `on_update_user_status` sequence expects the following values in arguments 1
 #### 1.6 User Voting Logic:
 
 **TODO:** Implement `on_vote`, a function that is called when the txn sender/user votes. The logic in this sequence properly casts a user's vote and updates the local and global states accordingly.
-- Check that the election isn't over and that user is allowed to vote using get_sender_can_vote.
+- [Assert](https://pyteal.readthedocs.io/en/stable/control_structures.html#checking-conditions-assert) that the election isn't over and that user is allowed to vote using get_sender_can_vote.
 - Check using `get_vote_of_sender` to check if the user has already voted. If so, return a 0. Otherwise, get the choice that the user wants to vote for from the application arguments.
-- Make sure that the vote choice is within index bounds of the vote options.
+- [Assert](https://pyteal.readthedocs.io/en/stable/control_structures.html#checking-conditions-assert) that the vote choice is within index bounds of the vote options.
 - Update the vote tally for the user's choice under the corresponding global variables.
 - Record the user's vote index in their account's local storage under the key `voted`
 
@@ -351,6 +351,7 @@ In `frontend/src/utils/AlgoHandler.js` fill out the following 4 functions with t
 3. `getElectionState(appID)`
     - **TODO:** Use `this.algodClient` to retrieve the app details
     - The rest is filled out for you :)
+    - Look over the logic and look at the returned value
 4. `getAllLocalStates(appID)`
     - **TODO:** Use `this.indexerClient` to find all accounts who are associated with the given app
     - **TODO:** Take the data and format it into a neat JavaScript object (nearly equivalent to a Python dictionary) as specified
