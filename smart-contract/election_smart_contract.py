@@ -15,7 +15,6 @@ def approval_program():
             # consider storing all of them as a string separated by commas e.g: "A,B,C,D".
             # Note that index-wise, A=0, B=1, C=2, D=3
             # Set all initial vote tallies to 0 for all vote options, keys are the vote options
-
             For(
 
             ).Do(
@@ -101,6 +100,7 @@ def clear_state_program():
 
 
 if __name__ == "__main__":
+    
     with open("vote_approval.teal", "w") as f:
         compiled = compileTeal(approval_program(), mode=Mode.Application, version=5)
         f.write(compiled)
