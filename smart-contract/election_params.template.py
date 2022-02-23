@@ -6,7 +6,7 @@ local_bytes = 1  # user's can_vote variable
 global_ints = (
     24  # 3 for setup + x for choices. Use a larger number for more choices.
 )
-global_bytes = 2  # Creator and VoteOptions variables
+global_bytes = 1  # VoteOptions variable
 
 # Define an election end period relative to current client status
 relative_election_end = 300000

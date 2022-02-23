@@ -98,6 +98,17 @@ function VoterCard(props) {
           <Card.Text>
             Waiting for the creator of the election to accept...
           </Card.Text>
+          <Card.Text className="mt-3">
+            You can close out or clear state to remove this smart contract from your account
+          </Card.Text>
+          <ButtonGroup>
+            <Button onClick={handleCloseOut} variant="info" type="submit">
+              Close Out
+            </Button>
+            <Button onClick={handleClearState} variant="info" type="submit">
+              Clear State
+            </Button>
+          </ButtonGroup>
         </Card.Body>
       )}
 
@@ -127,6 +138,17 @@ function VoterCard(props) {
                 Vote
               </Button>
             </ButtonGroup>
+            <Card.Text className="mt-3">
+              You can close out or clear state to remove this smart contract from your account
+            </Card.Text>
+            <ButtonGroup>
+              <Button onClick={handleCloseOut} variant="info" type="submit">
+                Close Out
+              </Button>
+              <Button onClick={handleClearState} variant="info" type="submit">
+                Clear State
+              </Button>
+            </ButtonGroup>
           </Card.Body>
         </div>
       )}
@@ -138,9 +160,12 @@ function VoterCard(props) {
             You have cast your vote for option{" "}
             {props.electionChoices[props.isVoted]}.
           </Card.Text>
-          <Card.Text>
-            If you'd like to have your vote removed, you can either close out or
-            clear state below.
+          <Card.Text className="mt-3">
+            You can close out or clear state to remove this smart contract from your account.
+            { props.latestRound < props.electionState.ElectionEnd ?
+                <div>This will also remove your vote from the election</div> :
+                <div>Your vote will remain in the election's final results</div>
+            }
           </Card.Text>
           <ButtonGroup>
             <Button onClick={handleCloseOut} variant="info" type="submit">
@@ -160,7 +185,9 @@ function VoterCard(props) {
             The creator of this election has rejected your request to be able to
             vote in this election.
           </Card.Text>
-
+          <Card.Text className="mt-3">
+            You can close out or clear state to remove this smart contract from your account
+          </Card.Text>
           <ButtonGroup>
             <Button onClick={handleCloseOut} variant="info" type="submit">
               Close Out
