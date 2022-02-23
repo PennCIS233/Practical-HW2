@@ -318,7 +318,8 @@ class TestSimpleElection(unittest.TestCase):
     def test_02_opt_in(self):
         """ tests two users opting in to contract """
 
-        for i in range(0, 2):
+        # opt-in three users
+        for i in range(0, 3):
             print(f"Testing account {account_addresses[i]} opt-in")
 
             opt_in_app(client, account_private_keys[i], TestSimpleElection.app_id)
@@ -334,7 +335,7 @@ class TestSimpleElection(unittest.TestCase):
         for i in range(0, 2):
             print(f"Testing creator approving {account_addresses[i]}")
 
-            # have the creator approve the user with "yes"
+            # have the creator approve the first two users with "yes"
             call_app_approve_voter(
                 client=client,
                 index=TestSimpleElection.app_id,
@@ -373,7 +374,23 @@ class TestSimpleElection(unittest.TestCase):
 
             print("-------------------------------------------------------------------------------")
 
-    def test_05_closeout(self):
+    def test_05_unapproved_cant_vote(self):
+        """ tests unapproved user trying to vote """
+
+        app_args = [b"vote", (0).to_bytes(8, 'big')]
+        # ensure an error occurs when an unapproved user tries to vote
+        self.assertRaises(
+            Exception,
+            call_app,
+            client,
+            account_private_keys[2],
+            TestSimpleElection.app_id,
+            app_args
+        )
+
+        print("-------------------------------------------------------------------------------")
+
+    def test_06_closeout(self):
         """ test closeout functionality on approved user 1, note: this happens before the election end """
 
         print(f"Testing close out of account {account_addresses[1]}")
