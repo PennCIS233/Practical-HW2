@@ -98,7 +98,7 @@ function VoterCard(props) {
           <Card.Text>
             Waiting for the creator of the election to accept...
           </Card.Text>
-          <Card.Text>
+          <Card.Text className="mt-3">
             You can close out or clear state to remove this smart contract from your account
           </Card.Text>
           <ButtonGroup>
@@ -138,7 +138,7 @@ function VoterCard(props) {
                 Vote
               </Button>
             </ButtonGroup>
-            <Card.Text>
+            <Card.Text className="mt-3">
               You can close out or clear state to remove this smart contract from your account
             </Card.Text>
             <ButtonGroup>
@@ -160,7 +160,7 @@ function VoterCard(props) {
             You have cast your vote for option{" "}
             {props.electionChoices[props.isVoted]}.
           </Card.Text>
-          <Card.Text>
+          <Card.Text className="mt-3">
             You can close out or clear state to remove this smart contract from your account.
             { props.latestRound < props.electionState.ElectionEnd ?
                 <div>This will also remove your vote from the election</div> :
@@ -185,7 +185,7 @@ function VoterCard(props) {
             The creator of this election has rejected your request to be able to
             vote in this election.
           </Card.Text>
-          <Card.Text>
+          <Card.Text className="mt-3">
             You can close out or clear state to remove this smart contract from your account
           </Card.Text>
           <ButtonGroup>
