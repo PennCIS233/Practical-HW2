@@ -292,7 +292,8 @@ We do not assume that you have extensive knowledge about JavaScript. JavaScript 
 
 Remark: JavaScript evolved quite a lot. Modern JavaScript allows much cleaner code. Avoid older JavaScript resources. Never ever use `var` but use instead `let` or `const`, as `var` can create very hard to debug issues.
 
-We also recommend using [VS Code](https://code.visualstudio.com/) as the IDE for JavaScript.
+We also recommend using [VS Code](https://code.visualstudio.com/) as the IDE for JavaScript and installing the [React Developer Tools
+](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) on Chrome to simplify debugging.
 
 #### AlgoSDK
 
