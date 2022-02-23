@@ -332,10 +332,11 @@ class TestSimpleElection(unittest.TestCase):
     def test_03_approve_users(self):
         """ tests the "yes" approval of two users """
 
+        # approve the first two users
         for i in range(0, 2):
             print(f"Testing creator approving {account_addresses[i]}")
 
-            # have the creator approve the first two users with "yes"
+            # have the creator approve the users with "yes"
             call_app_approve_voter(
                 client=client,
                 index=TestSimpleElection.app_id,
