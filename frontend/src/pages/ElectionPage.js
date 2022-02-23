@@ -144,6 +144,7 @@ function ElectionPage() {
                   user={mainAccount}
                   appID={appID}
                   electionState={electionState}
+                  latestRound={latestRound}
                   isAccepted={optedAccounts["yes"].includes(mainAccount)}
                   isPending={optedAccounts["maybe"].includes(mainAccount)}
                   isRejected={optedAccounts["no"].includes(mainAccount)}
