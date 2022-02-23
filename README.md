@@ -274,6 +274,8 @@ python3 simple_tests.py -v
 
 If our frontend wants to display relevant information to our users it will need a way to retrieve data from the Algorand blockchain. Similarly, if our frontend wants to allow users to interact with our election smart contract our frontend will need to be able to send transactions to the Algorand blockchain. We will make use of the PureStake Algod client and Indexer client to retrieve information about the current state of our smart contract. We will use the AlgoSDK and AlgoSigner to create, sign, and send transactions to be added to the Algorand TestNet.
 
+Remark: Currently the frontend does not update information automatically. You need to refresh the page once transactions are confirmed to see any change (it takes about 5s to confirm a transaction on Algorand).
+
 #### How
 
 `frontend/src/utils/AlgoHandler.js` is meant to contain all functionality related to retrieving information about the smart contract and sending transactions to the Algorand TestNet.

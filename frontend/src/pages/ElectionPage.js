@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Row, Col, Container, Modal, Button } from "react-bootstrap";
 import mainAlgoHandler from "../utils/AlgoHandler";
 import NavBar from "../components/NavBar";
@@ -38,7 +38,7 @@ function ElectionPage() {
    * Description:
    * Calls API to get election state and list of all users that have opted-in.
    */
-  const refreshState = () => {
+  const refreshState = useCallback(() => {
     if (!appID) {
       setIsError(true);
       return;
@@ -99,7 +99,7 @@ function ElectionPage() {
         console.log(err);
         setIsError(true);
       });
-  };
+  }, [appID]);
 
   /* useEffect
    * Description:

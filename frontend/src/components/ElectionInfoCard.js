@@ -65,11 +65,11 @@ function ElectionInfoCard(props) {
         <ListGroup>
           <ListGroup.Item>
             <b>App ID: </b>
-            <a href={"https://testnet.algoexplorer.io/application/" + props.appID} target="_blank">{props.appID}</a>
+            <a href={"https://testnet.algoexplorer.io/application/" + props.appID} target="_blank" rel="noreferrer">{props.appID}</a>
           </ListGroup.Item>
           <ListGroup.Item>
             <b>Creator Address: </b>
-            <a href={"https://testnet.algoexplorer.io/address/" + props.state["Creator"]} target="_blank">{props.state["Creator"] ? props.state["Creator"] : ""}</a>
+            <a href={"https://testnet.algoexplorer.io/address/" + props.state["Creator"]} target="_blank" rel="noreferrer">{props.state["Creator"] ? props.state["Creator"] : ""}</a>
           </ListGroup.Item>
           <ListGroup.Item>
             <b>Most Recent Round: </b>
