@@ -13,10 +13,11 @@ global_schema = transaction.StateSchema(global_ints, global_bytes)
 local_schema = transaction.StateSchema(local_ints, local_bytes)
 
 
-
 def create_app(client, private_key, approval_program, clear_program, global_schema, local_schema, app_args):
     """
-    Create a new application
+    Create a new application from the compiled approval_program, clear_program
+    using the application arguments app_args
+    Return the newly created application ID
     """
     # TODO: define sender as creator
     # TODO: declare the on_complete transaction as a NoOp transaction
@@ -34,9 +35,10 @@ def create_app(client, private_key, approval_program, clear_program, global_sche
     return app_id
 
 
-def deploy_create_app(client, creator_private_key, election_end, num_vote_options, vote_options):
+def create_vote_app(client, creator_private_key, election_end, num_vote_options, vote_options):
     """
-    Deploy the application that was created
+    Create/Deploy the voting app
+    This function uses create_app and return the newly created application ID
     """
     # TODO:
     # Get PyTeal approval program

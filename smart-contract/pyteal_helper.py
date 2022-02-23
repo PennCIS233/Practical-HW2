@@ -21,10 +21,12 @@ from pyteal import (
     TealType,
 )
 
+
 @Subroutine(TealType.bytes)
 def int_to_ascii(arg):
     """int_to_ascii converts an integer to the ascii byte that represents it"""
     return Extract(Bytes("0123456789"), arg, Int(1))
+
 
 @Subroutine(TealType.bytes)
 def itoa(i):

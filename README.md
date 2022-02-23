@@ -78,6 +78,8 @@ A walkthrough on how to do this can be seen here:
 
 In the same way as Practical Homework 1, in order to use your accounts they need to be funded. Use a [dispenser](https://bank.testnet.algorand.network/) to fund the accounts if they do not have Algos.
 
+Note that if you successfully finished Practical Homework 1, your two accounts must already have Algos in it and you can skip those tests.
+
 ### Step 0.4 - Install PyTeal
 
 Install the PyTeal library, `pyteal`, by typing this into your terminal:
@@ -178,7 +180,7 @@ Input your token and the private mnemonics of the accounts you want to register 
 
 The heart of the smart contract is a simple logical switch statement used to route evaluation to different sets of logic based on a Transaction's `OnComplete` value (defined in `create_app`). This logic allows the contract to choose which operation to run based on how the contract is called. For example, if `Txn.application_id()` is 0, then the on_creation sequence will run. If `Txn.on_completion()` is `OnComplete.OptIn`, the `on_register` sequence will run. If `Txn.application_args[0] == Bytes("vote")` then we want the `on_vote` sequence to be called. We've completed the first few cases for you.
 
-**Note:** What you end up passing into `application_args[0]` is the identifier in the transaction for the action to perform. In this case, there are two main actions we want to check for: when an account wants to vote and when the creator wants to update the user’s voting status. Make sure the name of the identifier that is passed into `application_args[0]` is “vote” for the first action and “update_user_status” for the second action.
+**Note:** What you end up passing into `application_args[0]` is the identifier in the transaction for the action (aka method) to perform. In this case, there are two main actions we want to check for: when an account wants to vote and when the creator wants to update the user’s voting status. Make sure the name of the identifier that is passed into `application_args[0]` is `vote` for the first action and `update_user_status` for the second action.
 
 **TODO:** Implement the `program` conditional. 
 
@@ -193,7 +195,7 @@ The heart of the smart contract is a simple logical switch statement used to rou
 
 Although there are many ways to store the vote options, for the purposes of this project, we want you to store them as a string of options separated by commas e.g., "A,B,C,D". Note that index-wise, A=0, B=1, C=2, D=3. 
 
-
+You can use the function `itoa` from `pyteal_helper.py`
 
 #### 1.3 Close-out
 
@@ -228,9 +230,8 @@ The `on_update_user_status` sequence expects the following values in arguments 1
 - Update the vote tally for the user's choice under the corresponding global variables.
 - Record the user's vote index in their account's local storage under the key `voted`
 
-`on_vote` variables:
-
-- choice (int): Index for option the sender/user wants to vote for
+The `on_vote` sequence expects the following values in arguments 1 of the `Txn.application_args` array:
+- `choice` (int): Index for option the sender/user wants to vote for
 
 
 
@@ -249,13 +250,13 @@ In the deploy script, you will deploy the voting contract using an ApplicationCa
 - `sp`: suggested parameters obtained from the network
 - `on_complete`: enum value, representing NoOp. Describes the action to be taken following the execution of the approval program or clear state program. 
 - `approval_program`: compiled program
-- `clear program`: compiled program
+- `clear_program`: compiled program
 - `local_schema`: maximum local storage allocation, immutable
 - `global_schema`: maximum global storage allocation, immutable
 
+You can use helper functions from `helper.py`, that you can import from example via `from helper import compile_program`.
 
-
-**TODO:** Implement `deploy_create_app`. First, compile the approval and clear state programs to TEAL assembly, then to binary. Create the application and the application arguments which should include a list of election parameters you defined previously as global variables: `election_end`, `num_vote_options`, `vote_options`.
+**TODO:** Implement `create_vote_app`. First, compile the approval and clear state programs to TEAL assembly, then to binary. Create the application and the application arguments which should include a list of election parameters you defined previously as global variables: `election_end`, `num_vote_options`, `vote_options`.
 
 **TODO:** Implement the `main()` function where you initialize the algod client and define absolute election end time fom the status of the last round. Deploy the application and print the global state.
 
@@ -264,10 +265,16 @@ In the deploy script, you will deploy the voting contract using an ApplicationCa
 
 Test your smart contract functions by running the testing script simple_tests.py. Feel free to add your own tests as the ones we have provided are not comprehensive. We only test that basic functionalities are working, namely the creation and initial variable setup, two users opting in, the creator correctly approving two users, approved users being able to vote, and closing out the app. 
 
+You can make the tests more verbose by specifying the `-v` option:
+```bash
+python3 simple_tests.py -v
+```
 
 ## Step 3 - Frontend Logic: `AlgoHandler.js`
 
 If our frontend wants to display relevant information to our users it will need a way to retrieve data from the Algorand blockchain. Similarly, if our frontend wants to allow users to interact with our election smart contract our frontend will need to be able to send transactions to the Algorand blockchain. We will make use of the PureStake Algod client and Indexer client to retrieve information about the current state of our smart contract. We will use the AlgoSDK and AlgoSigner to create, sign, and send transactions to be added to the Algorand TestNet.
+
+Remark: Currently the frontend does not update information automatically. You need to refresh the page once transactions are confirmed to see any change (it takes about 5s to confirm a transaction on Algorand).
 
 #### How
 
@@ -282,6 +289,11 @@ We do not assume that you have extensive knowledge about JavaScript. JavaScript 
 - [Learn javascript in Y Minutes](https://learnxinyminutes.com/docs/javascript/ "Learn javascript in Y Minutes") - basic JavaScript information
 - [The await keyword](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Async_await#the_await_keyword "The await keyword") - Essentially all you need to know about async/await for this homework
 - Google - We highly encourage you to search for documentation, tutorials, and other resources if you would like to know more about any functionality or design patterns in JavaScript (how to iterate through an array, ternary operations, etc)
+
+Remark: JavaScript evolved quite a lot. Modern JavaScript allows much cleaner code. Avoid older JavaScript resources. Never ever use `var` but use instead `let` or `const`, as `var` can create very hard to debug issues.
+
+We also recommend using [VS Code](https://code.visualstudio.com/) as the IDE for JavaScript and installing the [React Developer Tools
+](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) on Chrome to simplify debugging.
 
 #### AlgoSDK
 
@@ -311,7 +323,13 @@ Here is some useful documentation:
 - https://github.com/PureStake/algosigner/blob/develop/docs/dApp-integration.md#working-with-transactions
 - https://purestake.github.io/algosigner-dapp-example/
 
-#### Purestake Indexer API
+Remark: Some code on the Internet may use the legacy AlgoSigner API v1 (e.g., `AlgoSigner.sign`). Be careful to only use the v2 API (`AlgoSigner.signTxn`).
+
+#### Indexer API
+
+algod nodes that you have been using up to now are useful to send transactions and access information about the state of the blockchain such as the state of an application or the balance of an account.
+To access easily historical data from the Algorand blockchain, the best is to use the [indexer](https://github.com/algorand/indexer).
+The indexer connects to a node and creates an internal database of all the blockchain.
 
 Purestake has an API setup for querying historical data from the Algorand blockchain. You will use this API to retrieve data on who has opted-in to your election.
 
@@ -323,7 +341,7 @@ In `frontend/src/utils/` create a new file `frontend/src/utils/secrets.js` with 
 
 This file exports a singular instance of the class it contains which is meant to encapsulate data retrieval and transaction-sending from and to the Algorand blockchain.
 
-We provide you a skeleton outline with all the necessary functions needed for you to fill out. You will be graded on producing the correct outputs for these functions (for those that have a specified return) and for sending the correct properly-formatted transactions (for those that require sending a transaction) .
+We provide you a skeleton outline with all the necessary functions needed for you to fill out. You will be graded on producing the correct outputs for these functions (for those that have a specified return) and for sending the correct properly-formatted transactions (for those that require sending a transaction).
 
 ### Step 3.1 - AlgoHandler constructor
 
@@ -335,12 +353,6 @@ In `frontend/src/utils/AlgoHandler.js` fill out the `TODO` sections. Remember, d
 ### Step 3.2 - Retrieving Data
 
 In `frontend/src/utils/AlgoHandler.js` fill out the following 4 functions with the commented functionality. Remember, don't change the function names. Feel free to add helper functions if you want. Remember to use JavaScript's `await` keyword appropriately when using `this.algodClient`, `this.algodIndexer`, and `window.AlgoSigner`
-
-#### Relevant Documentation
-
-- https://developer.algorand.org/solutions/example-digital-exchange-smart-contract-application/
-- https://github.com/PureStake/algosigner/blob/develop/docs/dApp-integration.md#algosignerconnect
-- https://developer.algorand.org/docs/archive/build-apps/connect/
 
 1. `getAlgoSignerAccounts()`
     - **TODO:** Connect to AlgoSigner
@@ -375,15 +387,15 @@ In `frontend/src/utils/AlgoHandler.js` fill out the following 4 functions with t
       ```
       - **Note:** Only include values that are included in the original object. If a user does not have a value for `voted` then don't include the `voted` variable
 
-### Step 3.3 - Sending Transactions
-
-In `frontend/src/utils/AlgoHandler.js` fill out the following 6 functions with the commented functionality. Remember, don't change the function names. Feel free to add helper functions if you want. Remember to use JavaScript's `await` appropriately when using `this.algodClient`, `this.algodIndexer`, and `window.AlgoSigner`
-
 #### Relevant Documentation
 
-- https://developer.algorand.org/docs/get-details/dapps/smart-contracts/frontend/apps/#application-methods
-- https://github.com/PureStake/algosigner/blob/develop/docs/dApp-integration.md#algosignersigntxntxnobjects
-- https://algorand.github.io/js-algorand-sdk/
+- https://developer.algorand.org/solutions/example-digital-exchange-smart-contract-application/
+- https://github.com/PureStake/algosigner/blob/develop/docs/dApp-integration.md#algosignerconnect
+- https://developer.algorand.org/docs/archive/build-apps/connect/
+
+### Step 3.3 - Sending Transactions
+
+In `frontend/src/utils/AlgoHandler.js` fill out the following 6 functions with the commented functionality. Remember, don't change the function names. Feel free to add helper functions if you want. Remember to use JavaScript's `await` appropriately when using `this.algodClient`, `this.algodIndexer`, and `window.AlgoSigner`:
 
 1.  `signAndSend(txn)`
     - **TODO:** Convert the transaction to Base64 with AlgoSigner's method
@@ -406,6 +418,12 @@ In `frontend/src/utils/AlgoHandler.js` fill out the following 6 functions with t
     - **TODO:** Create transaction, sign and send, similar to above
 6.  `clearState(address, appID)`
     - **TODO:** Create transaction, sign and send, similar to above
+
+#### Relevant Documentation
+
+- https://developer.algorand.org/docs/get-details/dapps/smart-contracts/frontend/apps/#application-methods
+- https://github.com/PureStake/algosigner/blob/develop/docs/dApp-integration.md#algosignersigntxntxnobjects
+- https://algorand.github.io/js-algorand-sdk/
 
 ## Bonus - A brief tour of our React application
 
