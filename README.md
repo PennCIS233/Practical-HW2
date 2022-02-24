@@ -337,6 +337,8 @@ Take a look at this example to see how it uses the Indexer to read the local sta
 
 In `frontend/src/utils/` create a new file `frontend/src/utils/secrets.js` with the same format as `frontend/src/utils/secrets.template.js` using your PureStake API key.
 
+Note: The PureStake API key will be visible by everybody accessing the frontend/website. This is an important security issue as it allows anyone visiting your website to steal this key and use your PureStake API credits. If you were to write a production website, you would need to either use a "shim" backend that only allows queries from your website and that forward those queries to the PureStake endpoint (so your backend knows the key but not your frontend), or you would need to use an endpoint provided by the AlgoSigner wallet. However, for this homework, it is much simpler to just have your PureStake API key hardcoded in the frontend.
+
 #### AlgoHandler.js `frontend/src/utils/AlgoHandler.js`
 
 This file exports a singular instance of the class it contains which is meant to encapsulate data retrieval and transaction-sending from and to the Algorand blockchain.
