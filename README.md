@@ -245,7 +245,7 @@ The `on_vote` sequence expects the following values in arguments 1 of the `Txn.a
 
 In the deploy script, you will deploy the voting contract using an ApplicationCall transaction in `create_app` and complete the `main()` function.
 
-**TODO:** Implement `create_app`. The creator will deploy the app using this method. This method has 7 parameters:
+**TODO:** Implement `create_app`. The creator will deploy the app using this method. In `create_app`, you will instantiate an ApplicationCall transaction to create the voting application, which will take in 8 inputs: 
 - `sender`: address, representing the creator of the app
 - `sp`: suggested parameters obtained from the network
 - `on_complete`: enum value, representing NoOp. Describes the action to be taken following the execution of the approval program or clear state program. 
@@ -253,6 +253,7 @@ In the deploy script, you will deploy the voting contract using an ApplicationCa
 - `clear_program`: compiled program
 - `local_schema`: maximum local storage allocation, immutable
 - `global_schema`: maximum global storage allocation, immutable
+- `app_args`: arguments array to be passed into the voting application containing the voting election parameters
 
 You can use helper functions from `helper.py`, that you can import from example via `from helper import compile_program`.
 
