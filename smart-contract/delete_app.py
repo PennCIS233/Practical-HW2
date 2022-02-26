@@ -11,6 +11,7 @@ from election_smart_contract import approval_program, clear_state_program
 from secrets import account_mnemonics, algod_headers, algod_address
 import election_params
 from election_params import relative_election_end, num_vote_options, vote_options, local_ints, local_bytes, global_ints, global_bytes
+from helper import wait_for_confirmation
 
 ''' Each Algorand account can only create 10 apps unless apps are deleted. To create more voting smart contracts or test smart contract create app functionalities more than 10 times, 
 use this script to delete previously created apps. Uncomment the last few lines of this script to either delete a specific app or all apps from a user's account.'''
