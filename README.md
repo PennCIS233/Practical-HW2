@@ -172,9 +172,9 @@ For standardization, we require everyone use the same global variable names in t
 
 Copy the files `election_param.template.py` and `secrets.template.py` into `election_params.py` and `secrets.py`.
 
-Input your token and the private mnemonics of the accounts you want to register for the voting election in `secrets.py`. One of these will be the Creator account. Input the election parameters in `election_params.py`, where you will declare local and global ints and bytes for the local and global state schema, and define the election period, and the voting options. 
+Input your token and the private mnemonics of the accounts you want to register for the voting election in `secrets.py`. One of these will be the Creator account. Input the election parameters in `election_params.py`, where you will declare local and global ints and bytes for the local and global state schema, and define the relative election end period (to the current round), and the voting options. 
 
-`election_smart_contract.py` will import values from both these files as parameters for the election you will create and accounts who opt in and vote. You can create and deploy new smart contracts based on new parameters or accounts. Since each account can only create up to 10 apps unless apps are deleted, feel free to run delete_app.py to delete previously created apps if the limit is reached.
+`deploy.py` will import values from both these files as parameters for the election you will create and accounts who opt in and vote. You can create and deploy new smart contracts based on new parameters or accounts. Since each account can only create up to 10 apps unless apps are deleted, feel free to run delete_app.py to delete previously created apps if the limit is reached.
 
 #### Step 1.1: Main Conditional 
 
@@ -186,7 +186,7 @@ The heart of the smart contract is a simple logical switch statement used to rou
 
 #### Step 1.2: Creation
 
-**TODO:** `on_create`: This sequence runs when the smart contract is created. It takes arguments from creation and puts them into the proper global variables.
+**TODO:** `on_create`: This sequence runs when the smart contract is created. It takes application arguments from the creation transaction and puts them into the proper global variables.
 - Store the values of election parameters passed from the application arguments of the election that was created.
   - `ElectionEnd` -the round number for the end of the election
   - `VoteOptions` - the different options to vote for,
@@ -212,7 +212,7 @@ You can use the function `itoa` from `pyteal_helper.py`
 #### 1.5 Update user logic
 
 **TODO:** Implement `on_update_user_status`, which is called when creator wants to approve/disapprove of a user who opted-in the election.
-- Fetch the creator's decision to approve or reject a user acccount and update user's voting status accordingly.
+- Fetch the creator's decision to approve or reject a user account and update user's voting status accordingly.
 - [Assert](https://pyteal.readthedocs.io/en/stable/control_structures.html#checking-conditions-assert) the following: only the creator of the smart contract can approve or disapprove users and users can only be approved before the election ends and the creator cannot update a given user's status more than once.
 - Think about how the given user's address and creator's decision are stored
 - You should set the user's `can_vote` local state variable to what the creator has decided: `"yes"` or `"no"`
@@ -257,7 +257,7 @@ In the deploy script, you will deploy the voting contract using an ApplicationCa
 
 You can use helper functions from `helper.py`, that you can import from example via `from helper import compile_program`.
 
-**TODO:** Implement `create_vote_app`. First, compile the approval and clear state programs to TEAL assembly, then to binary. Create the application and the application arguments which should include a list of election parameters you defined previously as global variables: `election_end`, `num_vote_options`, `vote_options`.
+**TODO:** Implement `create_vote_app`. First, compile the approval and clear state programs to TEAL assembly, then to binary. Create the application and the application arguments which should include a list of election parameters you defined previously as global variables in `election_params.py`: `election_end`, `num_vote_options`, `vote_options`. These values are imported into the deploy script. 
 
 **TODO:** Implement the `main()` function where you initialize the algod client and define absolute election end time fom the status of the last round. Deploy the application and print the global state.
 
