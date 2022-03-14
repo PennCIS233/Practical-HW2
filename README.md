@@ -110,6 +110,13 @@ The smart contract is inside the `smart-contract` folder.
 
 We recall that the smart contract will be written in Python using PyTeal.
 
+### Relevant Documentation
+
+- [Official PyTeal Documentation](https://pyteal.readthedocs.io/en/stable/index.html)
+- [Algorand's PyTeal Tutorial](https://developer.algorand.org/docs/get-details/dapps/pyteal/)
+- [Important PyTeal Note!](https://developer.algorand.org/docs/get-details/dapps/pyteal/#a-note-about-pyteal-expressions)
+- [Alternative Voting Smart Contract Example](https://pyteal.readthedocs.io/en/stable/examples.html#voting) (this is not our election design and has several key differences!!! Do not follow this design!)
+
 ### Design Overview:
 
 In `election_smart_contract.py`, you will be creating a smart contract that conducts an election with multiple discrete choices. You will define each choice as a byte string and user accounts will be able to register and vote for any of the choices. There is a configurable election period defined by global variable, `ElectionEnd`, the [Algorand round](https://developer.algorand.org/docs/get-details/transactions/#current-round) (block number) when the election will end.
@@ -149,16 +156,16 @@ For standardization, we require everyone use the same global variable names in t
 - Round number is how the algorand blockchain keeps track of time
 - After this round number/time no more opting-in, voting, approvals, etc
 
-`VoteOptions` (bytes)
-
-- String consisting of all vote options concatenated together separated with commas
-- Example: Abby, Barney, Cho, and Di are options then VoteOptions=”Abby,Barney,Cho,Di”
-
 `NumVoteOptions` (int)
 
 - Number of options to vote for
 - We need this variable because Teal/Pyteal/Algorand doesn’t have arrays, so we store the vote options as a string (see above), so we need this variable to tell the smart contract how many voting options there are
 - Example: Abby, Barney, Cho, and Di are options, so VoteOptions=”Abby,Barney,Cho,Di” and NumVoteOptions=4
+
+`VoteOptions` (bytes)
+
+- String consisting of all vote options concatenated together separated with commas
+- Example: Abby, Barney, Cho, and Di are options then VoteOptions=”Abby,Barney,Cho,Di”
 
 `VotesFor0, VotesFor1, VotesFor2, etc` (int)
 
@@ -188,9 +195,9 @@ The heart of the smart contract is a simple logical switch statement used to rou
 
 **TODO:** `on_create`: This sequence runs when the smart contract is created. It takes application arguments from the creation transaction and puts them into the proper global variables.
 - Store the values of election parameters passed from the application arguments of the election that was created.
-  - `ElectionEnd` -the round number for the end of the election
-  - `VoteOptions` - the different options to vote for,
-  - `NumVoteOptions` - the number of options there are to vote for
+  - `ElectionEnd` - the round number for the end of the election (first app arg, 0)
+  - `NumVoteOptions` - the number of options there are to vote for (second app arg, 1)
+  - `VoteOptions` - the different options to vote for (third app arg, 2)
 - For all vote options, set initial vote tallies corresponding to all vote options to 0 where the keys are the vote options. (`VotesFor0`, `VotesFor1`, etc)
 
 Although there are many ways to store the vote options, for the purposes of this project, we want you to store them as a string of options separated by commas e.g., "A,B,C,D". Note that index-wise, A=0, B=1, C=2, D=3. 
@@ -243,6 +250,11 @@ The `on_vote` sequence expects the following values in arguments 1 of the `Txn.a
 
 ## Step 2 - Implement the smart contract deploy script
 
+### Relevant Documentation
+
+- [Deployment Example](https://pyteal.readthedocs.io/en/stable/examples.html#voting)
+- [Algorand PyTeal Documentation](https://developer.algorand.org/docs/get-details/dapps/pyteal/)
+
 In the deploy script, you will deploy the voting contract using an ApplicationCall transaction in `create_app` and complete the `main()` function.
 
 **TODO:** Implement `create_app`. The creator will deploy the app using this method. In `create_app`, you will instantiate an ApplicationCall transaction to create the voting application, which will take in 8 inputs: 
@@ -257,14 +269,14 @@ In the deploy script, you will deploy the voting contract using an ApplicationCa
 
 You can use helper functions from `helper.py`, that you can import from example via `from helper import compile_program`.
 
-**TODO:** Implement `create_vote_app`. First, compile the approval and clear state programs to TEAL assembly, then to binary. Create the application and the application arguments which should include a list of election parameters you defined previously as global variables in `election_params.py`: `election_end`, `num_vote_options`, `vote_options`. These values are imported into the deploy script. 
+**TODO:** Implement `create_vote_app`. First, compile the approval and clear state programs to TEAL assembly, then to binary. Ensure you set the TEAL version to 5. Create the application and the application arguments which should include a list of election parameters you defined previously as global variables in `election_params.py`: `election_end`, `num_vote_options`, `vote_options`. These values are imported into the deploy script. 
 
 **TODO:** Implement the `main()` function where you initialize the algod client and define absolute election end time fom the status of the last round. Deploy the application and print the global state.
 
 
 ### Test smart contract using `simple_tests.py`
 
-Test your smart contract functions by running the testing script simple_tests.py. Feel free to add your own tests as the ones we have provided are not comprehensive. We only test that basic functionalities are working, namely the creation and initial variable setup, two users opting in, the creator correctly approving two users, approved users being able to vote, and closing out the app. 
+Test your smart contract functions by running the testing script `simple_tests.py`. Feel free to add your own tests as the ones we have provided are not comprehensive. We only test that basic functionalities are working, namely the creation and initial variable setup, two users opting in, the creator correctly approving two users, approved users being able to vote, and closing out the app. 
 
 You can make the tests more verbose by specifying the `-v` option:
 ```bash
@@ -398,24 +410,27 @@ In `frontend/src/utils/AlgoHandler.js` fill out the following 4 functions with t
 
 ### Step 3.3 - Sending Transactions
 
-In `frontend/src/utils/AlgoHandler.js` fill out the following 6 functions with the commented functionality. Remember, don't change the function names. Feel free to add helper functions if you want. Remember to use JavaScript's `await` appropriately when using `this.algodClient`, `this.algodIndexer`, and `window.AlgoSigner`:
+In `frontend/src/utils/AlgoHandler.js` fill out the following 6 functions with the commented functionality. Remember, don't change the function names. Feel free to add helper functions if you want. Remember to use JavaScript's `await` appropriately when using `this.algodClient`, `this.algodIndexer`, `this.signAndSend` (this is an async function too) and `window.AlgoSigner`.
+
+Note: Where applicable, use the suggested params from this.algodClient and do not edit/change them.
 
 1.  `signAndSend(txn)`
     - **TODO:** Convert the transaction to Base64 with AlgoSigner's method
     - **TODO:** Sign the base64 transaction with AlgoSigner
     - **TODO:** Send the message with AlgoSigner
 2.  `optInAccount(address, appID)`
-    - **TODO:** Get the suggested params from `this.algodClient`
+    - **TODO:** Get the suggested params from `this.algodClient`. Do not edit/change these
     - **TODO:** Create the opt-in transaction
     - **TODO:** Sign and send the transaction with our `this.signAndSend` function
 3.  `updateUserStatus(creatorAddress, userAddress, yesOrNo, appID)`
-    - **TODO:** Get the suggested params from `this.algodClient`
+    - **TODO:** Get the suggested params from `this.algodClient`. Do not edit/change these
     - **TODO:** Set up the transaction app arguments (remember the first argument should be the smart contract method identifier, in this case that's `"update_user_status"` )
     - **TODO:** Create the transaction
       - Include both the creator's address and user's address in the optional address array when creating the transaction (different from app args)
     - **TODO:** Sign and send the transaction with our `this.signAndSend` function
 4.  `vote(address, optionIndex, appID)`
     - **TODO:** Create app parameters (remember the first argument should be the smart contract method identifier, in this case that's `"vote"` )
+      - algosdk has a built in method for encoding numbers: https://algorand.github.io/js-algorand-sdk/modules.html#encodeUint64
     - **TODO**, create transaction, sign and send
 5.  `closeOut(address, appID)`
     - **TODO:** Create transaction, sign and send, similar to above
@@ -449,4 +464,4 @@ Components:
 
 We highly recommend taking a look at the files themselves, so that you have a good sense of how the frontend works!
 
-You can try running the app in your Chrome browser by running `npm start` in the `frontend/voting-app` folder. 
+You can try running the app in your Chrome browser by running `npm start` in the `frontend` folder. 
