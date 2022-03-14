@@ -213,7 +213,7 @@ You can use the function `itoa` from `pyteal_helper.py`
 #### 1.4 Registration
 
 **TODO:** Implement `on_register`, a function that is called when sender/user opts-in to the smart contract. 
-- Ensure that the user is registering before the election end
+- [Assert](https://pyteal.readthedocs.io/en/stable/control_structures.html#checking-conditions-assert) that the user is registering before the election end
 - If so, in the user's account's local storage set the `can_vote` variable to `"maybe"`
 
 #### 1.5 Update user logic
