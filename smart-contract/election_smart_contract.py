@@ -34,7 +34,7 @@ def approval_program():
     # get_vote_sender is a value that the sender voted for,
     #   a number indicating the index in the VoteOptions string faux-array.
     # Remember that since we stored the election's voting options as a string separated by commas (such as "A,B,C,D"),
-    # If a user wants to vote for C, then the choice that the user wants to vote for is equivalent to "3".
+    # If a user wants to vote for C, then the choice that the user wants to vote for is equivalent to the uint 2
     get_vote_of_sender = App.localGetEx(Int(0), App.id(), Bytes("voted"))
 
     on_closeout = Seq(
